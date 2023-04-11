@@ -8,7 +8,7 @@ Allocated to serve Financial Sector customers in the development and support of 
 
 * 🌍  I'm based in Brasil - São Paulo/SP
 * ✉️  You can contact me at [mreis.santos88@gmail.com](mailto:mreis.santos88@gmail.com)
-* 🧠  I'm learning Estou estudando para tirar certificação Java
+* 🧠  I'm learning Java
 * 🤝  I'm open to collaborating on Em novos projetos
 
 <a href="https://www.github.com/Msantos88" target="_blank" rel="noreferrer"><img
