@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:barbearia-${random.uuid};MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+barbearia:
+  verificacao-pendentes-ms: 999999999
+  admin:
+    usuario: admin
+    senha: senha-de-teste-123

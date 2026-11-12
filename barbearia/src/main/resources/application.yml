@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: barbearia-agendamento
+  datasource:
+    url: ${DATABASE_URL:jdbc:h2:file:./data/barbearia;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE}
+    username: ${DATABASE_USER:sa}
+    password: ${DATABASE_PASSWORD:}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: ${PORT:8080}
+  forward-headers-strategy: framework
+
+barbearia:
+  nome: ${BARBEARIA_NOME:Barbearia}
+  fuso-horario: America/Sao_Paulo
+  percentual-sinal: 50              # % do valor pago antecipadamente para garantir a reserva
+  minutos-para-pagar-sinal: 30      # tempo que o horário fica segurado aguardando o PIX
+  intervalo-entre-horarios-minutos: 30
+  antecedencia-minima-minutos: 60
+  dias-maximos-para-agendar: 30
+  abertura: "09:00"
+  fechamento: "19:00"
+  dias-de-funcionamento: [TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY]
+  verificacao-pendentes-ms: 60000
+  admin:
+    usuario: ${ADMIN_USUARIO:admin}
+    senha: ${ADMIN_SENHA:admin}
+
+pagamento:
+  # "simulador" (desenvolvimento) ou "mercadopago" (produção)
+  provedor: ${PAGAMENTO_PROVEDOR:simulador}
+  mercadopago:
+    base-url: https://api.mercadopago.com
+    access-token: ${MERCADOPAGO_ACCESS_TOKEN:}
+    webhook-secret: ${MERCADOPAGO_WEBHOOK_SECRET:}
+    notification-url: ${MERCADOPAGO_NOTIFICATION_URL:}
