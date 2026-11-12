@@ -71,7 +71,7 @@ docker build -t barbearia .
 docker run -p 8080:8080 --env-file .env barbearia
 ```
 
-O site precisa estar em **HTTPS** (Render, Railway, Fly.io, uma VPS com Caddy/Nginx etc.).
+O site precisa estar em **HTTPS**. Passo a passo para a Hostinger (VPS + Docker Compose + HTTPS automático): [DEPLOY-HOSTINGER.md](DEPLOY-HOSTINGER.md).
 
 ## Personalização
 
