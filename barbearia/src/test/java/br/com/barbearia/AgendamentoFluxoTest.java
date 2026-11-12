@@ -90,7 +90,16 @@ class AgendamentoFluxoTest {
     void pagamentoDoSinalConfirmaAReserva() throws Exception {
         String id = reservar(CORTE, JOAO, "2026-11-17T10:00:00").get("id").asText();
 
-        mvc.perform(post("/api/simulador/agendamentos/" + id + "/pagar"))
+        // o simulador "paga" sem dinheiro: só funciona com o login da barbearia
+        mvc.perform(post("/api/simulador/agendamentos/" + id + "/pagar").with(csrf()))
+                .andExpect(status().isUnauthorized());
+        mvc.perform(post("/api/simulador/agendamentos/" + id + "/pagar")
+                        .with(httpBasic("admin", "senha-de-teste-123")))
+                .andExpect(status().isForbidden()); // sem token CSRF
+        assertThat(statusDe(id)).isEqualTo(StatusAgendamento.AGUARDANDO_PAGAMENTO);
+
+        mvc.perform(post("/api/simulador/agendamentos/" + id + "/pagar")
+                        .with(httpBasic("admin", "senha-de-teste-123")).with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("CONFIRMADO"))
                 .andExpect(jsonPath("$.pix").doesNotExist());
@@ -163,6 +172,29 @@ class AgendamentoFluxoTest {
     }
 
     @Test
+    void clienteSoPodeSegurarUmHorarioPorVezSemPagar() throws Exception {
+        String primeiro = reservar(CORTE, JOAO, "2026-11-17T10:00:00").get("id").asText();
+
+        // mesmo telefone (formatado diferente) ou mesmo e-mail (maiúsculas) em outro horário/barbeiro: recusado
+        for (String outroCliente : new String[]{
+                cliente("Outro", "11 91234 5678", "outro@exemplo.com"),
+                cliente("Outro", "(21) 99999-0000", "CARLOS@Exemplo.com")}) {
+            mvc.perform(post("/api/agendamentos").contentType(MediaType.APPLICATION_JSON)
+                            .content(corpo(CORTE, PEDRO, "2026-11-17T15:00:00", outroCliente)))
+                    .andExpect(status().isUnprocessableEntity())
+                    .andExpect(jsonPath("$.mensagem").value(org.hamcrest.Matchers.containsString("aguardando pagamento")));
+        }
+
+        // depois de pagar, pode agendar outro horário
+        pagar(primeiro);
+        reservar(CORTE, PEDRO, "2026-11-17T15:00:00");
+
+        // e quando a reserva pendente expira, também
+        relogio.avancar(Duration.ofMinutes(31));
+        reservar(CORTE, PEDRO, "2026-11-17T16:00:00");
+    }
+
+    @Test
     void validaDadosDoCliente() throws Exception {
         mvc.perform(post("/api/agendamentos").contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -184,7 +216,7 @@ class AgendamentoFluxoTest {
         mvc.perform(get("/api/admin/agendamentos").param("data", "2026-11-17")
                         .with(httpBasic("admin", "senha-de-teste-123")))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].clienteTelefone").value("(11) 91234-5678"));
+                .andExpect(jsonPath("$[0].clienteTelefone").value("11912345678"));
 
         String id = repositorio.findAll().get(0).getId().toString();
         mvc.perform(post("/api/admin/agendamentos/" + id + "/cancelar")
@@ -218,10 +250,18 @@ class AgendamentoFluxoTest {
     }
 
     private String corpo(Long servico, Long barbeiro, String inicio) {
+        return corpo(servico, barbeiro, inicio, cliente("Carlos Silva", "(11) 91234-5678", "carlos@exemplo.com"));
+    }
+
+    private String corpo(Long servico, Long barbeiro, String inicio, String cliente) {
         return """
-                {"servicoId":%d,"barbeiroId":%d,"inicio":"%s",
-                 "clienteNome":"Carlos Silva","clienteTelefone":"(11) 91234-5678","clienteEmail":"carlos@exemplo.com"}
-                """.formatted(servico, barbeiro, inicio);
+                {"servicoId":%d,"barbeiroId":%d,"inicio":"%s",%s}
+                """.formatted(servico, barbeiro, inicio, cliente);
+    }
+
+    private static String cliente(String nome, String telefone, String email) {
+        return "\"clienteNome\":\"%s\",\"clienteTelefone\":\"%s\",\"clienteEmail\":\"%s\""
+                .formatted(nome, telefone, email);
     }
 
     private java.util.List<String> horarios(Long barbeiro, Long servico, String data) throws Exception {

@@ -46,7 +46,11 @@ Painel: `https://agendar.seudominio.com.br/admin.html`.
 ## 4. Testar online com o pagamento simulado
 
 Com `PAGAMENTO_PROVEDOR=simulador`, faça agendamentos pelo celular e use o botão
-"Simular pagamento". Assim você valida horários, telas e painel antes de mexer com dinheiro.
+"Simular pagamento". O navegador vai pedir o **login do painel** (usuário e senha do `.env`): só a barbearia
+consegue simular pagamentos. Assim você valida horários, telas e painel antes de mexer com dinheiro.
+
+> Cada telefone/e-mail só pode ter uma reserva aguardando pagamento por vez, e cada conexão pode criar até
+> 5 reservas por hora. Para testes repetidos, simule o pagamento ou use telefones/e-mails diferentes.
 
 ## 5. Ligar o Mercado Pago
 
@@ -98,7 +102,8 @@ docker compose exec db pg_dump -U barbearia barbearia > backup.sql   # backup do
 
 - **Site não abre / erro de certificado:** o DNS ainda não propagou ou as portas 80/443 estão bloqueadas.
   No hPanel, em **VPS → Firewall**, libere as portas 80 e 443 (e 22 para SSH).
-- **App reinicia em loop com "Em produção defina ADMIN_SENHA":** a senha do painel precisa ter 10+ caracteres
-  quando o Mercado Pago está ligado.
+- **App reinicia em loop com erro de `ADMIN_SENHA`:** a senha do painel precisa ter 10+ caracteres e não pode
+  ser a de exemplo (`troque-...`). Veja `docker compose logs app`.
+- **Painel responde "Muitas tentativas de login":** foram 10 senhas erradas seguidas daquele IP; aguarde 15 minutos.
 - **Pagou e não confirmou:** confira os logs (`docker compose logs app | grep -i pagamento`) e a URL do webhook
   no painel do Mercado Pago. Mesmo sem webhook, o sistema consulta pagamentos pendentes a cada minuto.

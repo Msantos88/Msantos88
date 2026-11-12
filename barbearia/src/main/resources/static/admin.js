@@ -19,6 +19,7 @@ async function api(caminho, opcoes = {}) {
     headers: { 'Content-Type': 'application/json', 'X-XSRF-TOKEN': csrf() },
   });
   const corpo = await resp.json().catch(() => null);
+  if (resp.status === 429) throw new Error((corpo && corpo.mensagem) || 'Muitas tentativas. Aguarde.');
   if (!resp.ok) throw new Error((corpo && corpo.mensagem) || `Erro ${resp.status}`);
   return corpo;
 }

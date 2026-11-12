@@ -15,7 +15,9 @@ spring:
 
 server:
   port: ${PORT:8080}
-  forward-headers-strategy: framework
+  # Usa o IP real do cliente informado pelo Caddy (X-Forwarded-For), confiando apenas em proxies
+  # da rede interna — um cliente não consegue falsificar o próprio IP enviando esse cabeçalho.
+  forward-headers-strategy: native
 
 barbearia:
   nome: ${BARBEARIA_NOME:Barbearia}
@@ -31,7 +33,13 @@ barbearia:
   verificacao-pendentes-ms: 60000
   admin:
     usuario: ${ADMIN_USUARIO:admin}
-    senha: ${ADMIN_SENHA:admin}
+    senha: ${ADMIN_SENHA:}            # vazio = senha aleatória exibida no log ao iniciar
+  seguranca:
+    requisicoes-por-minuto: 120       # por IP, todas as rotas /api
+    reservas-por-ip: 5                # reservas que um mesmo IP pode criar...
+    janela-reservas: 1h               # ...dentro deste período
+    tentativas-de-login: 10           # senhas erradas no painel antes de bloquear o IP...
+    bloqueio-login: 15m               # ...por este tempo
 
 pagamento:
   # "simulador" (desenvolvimento) ou "mercadopago" (produção)

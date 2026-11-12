@@ -134,13 +134,23 @@ public class AgendamentoService {
         LocalDateTime fim = inicio.plusMinutes(servico.getDuracaoMinutos());
         validarHorario(inicio, fim, agora);
 
+        String telefone = cmd.clienteTelefone().replaceAll("\\D", "");
+        String email = cmd.clienteEmail().trim().toLowerCase(java.util.Locale.ROOT);
+        if (telefone.length() < 10 || telefone.length() > 13) {
+            throw new RegraDeNegocioException("Telefone inválido. Informe o DDD e o número.");
+        }
+        // Cada cliente só pode segurar um horário por vez sem pagar: evita que alguém bloqueie a agenda.
+        if (agendamentos.existePendenteDoCliente(telefone, email, agora)) {
+            throw new RegraDeNegocioException("Você já tem uma reserva aguardando pagamento. Pague o PIX dela "
+                    + "ou aguarde " + props.minutosParaPagarSinal() + " minutos para ela expirar.");
+        }
         if (!ocupando(barbeiro.getId(), inicio, fim, agora, null).isEmpty()) {
             throw new RegraDeNegocioException("Este horário acabou de ser reservado. Escolha outro horário.");
         }
 
         LocalDateTime expiraEm = agora.plusMinutes(props.minutosParaPagarSinal());
         Agendamento agendamento = new Agendamento(servico, barbeiro, cmd.clienteNome().trim(),
-                cmd.clienteTelefone().trim(), cmd.clienteEmail().trim(), inicio,
+                telefone, email, inicio,
                 politicaDeSinal.calcularSinal(servico.getPreco()), agora, expiraEm);
         return agendamentos.save(agendamento);
     }

@@ -41,8 +41,12 @@ cd barbearia
 mvn spring-boot:run
 ```
 
-Abra http://localhost:8080. Em desenvolvimento o pagamento é **simulado**: na tela do PIX aparece o botão
-"Simular pagamento". Painel: http://localhost:8080/admin.html (usuário `admin`, senha `admin`).
+Abra http://localhost:8080. Painel: http://localhost:8080/admin.html, usuário `admin`. Não existe senha
+padrão: se `ADMIN_SENHA` não for definida, uma senha temporária aparece no console ao iniciar
+(`ADMIN_SENHA não definida. Senha temporária do painel...`).
+
+Em desenvolvimento o pagamento é **simulado**: na tela do PIX aparece o botão "Simular pagamento", que pede o
+login do painel (assim, mesmo com o simulador ligado num servidor público, clientes não conseguem "pagar" de mentira).
 
 Testes: `mvn test`.
 
@@ -63,7 +67,7 @@ Testes: `mvn test`.
 | `MERCADOPAGO_NOTIFICATION_URL` | `https://SEU-DOMINIO/api/pagamentos/webhook/mercadopago` |
 | `DATABASE_URL` | `jdbc:postgresql://host:5432/barbearia` |
 | `DATABASE_USER` / `DATABASE_PASSWORD` | credenciais do PostgreSQL |
-| `ADMIN_USUARIO` / `ADMIN_SENHA` | login do painel (senha com 10+ caracteres, obrigatório em produção) |
+| `ADMIN_USUARIO` / `ADMIN_SENHA` | login do painel (senha com 10+ caracteres) |
 | `BARBEARIA_NOME` | `Barbearia Dom Corte` |
 
 ```bash
@@ -92,9 +96,23 @@ crie uma nova migração (`V2__...sql`).
   já pegou o horário, ela fica como **"Devolver sinal"** no painel.
 - O link do agendamento usa um identificador aleatório (UUID) e não mostra telefone nem e-mail.
 
+## Proteções contra abuso
+
+| Proteção | Padrão (`barbearia.seguranca` no `application.yml`) |
+|---|---|
+| Cada cliente (telefone **ou** e-mail) só segura **1 horário sem pagar** por vez | fixo |
+| Reservas criadas por IP | 5 por hora |
+| Requisições à API por IP | 120 por minuto |
+| Senhas erradas no painel | 10 erros → IP bloqueado por 15 min (a senha certa zera a contagem) |
+| Simulador de pagamento | só com login do painel |
+| Senha do painel | sem senha padrão; mínimo 10 caracteres; recusa a senha de exemplo |
+
+O IP do cliente vem do cabeçalho `X-Forwarded-For` definido pelo Caddy, e só é aceito quando vem de um proxy
+da rede interna: um visitante não consegue trocar de IP falsificando esse cabeçalho. Os limites ficam em
+memória, então valem para uma instância da aplicação (o caso do VPS).
+
 ## Próximos passos sugeridos
 
 - Política de cancelamento pelo cliente e estorno automático via API do Mercado Pago.
 - Lembrete por WhatsApp/e-mail na véspera.
 - Cadastro de serviços, barbeiros, folgas e feriados pelo painel.
-- Limite de requisições (rate limit) nas rotas públicas.

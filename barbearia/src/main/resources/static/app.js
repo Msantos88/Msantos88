@@ -10,11 +10,13 @@ let timerPolling = null;
 let timerContador = null;
 
 async function api(caminho, opcoes = {}) {
+  const xsrf = (document.cookie.match(/(?:^|; )XSRF-TOKEN=([^;]+)/) || [])[1];
   const resp = await fetch('/api' + caminho, {
-    headers: { 'Content-Type': 'application/json' },
     ...opcoes,
+    headers: { 'Content-Type': 'application/json', ...(xsrf ? { 'X-XSRF-TOKEN': decodeURIComponent(xsrf) } : {}) },
   });
   const corpo = resp.status === 204 ? null : await resp.json().catch(() => null);
+  if (resp.status === 401) throw new Error('É preciso entrar com o login do painel da barbearia.');
   if (!resp.ok) throw new Error((corpo && corpo.mensagem) || 'Algo deu errado. Tente novamente.');
   return corpo;
 }

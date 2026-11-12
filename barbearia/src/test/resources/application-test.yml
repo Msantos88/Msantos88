@@ -6,3 +6,9 @@ barbearia:
   admin:
     usuario: admin
     senha: senha-de-teste-123
+  seguranca:
+    requisicoes-por-minuto: 100000
+    reservas-por-ip: 100000
+    janela-reservas: 1h
+    tentativas-de-login: 100000
+    bloqueio-login: 15m

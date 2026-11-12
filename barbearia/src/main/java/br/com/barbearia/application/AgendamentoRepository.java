@@ -27,6 +27,17 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, UUID> 
                                         @Param("fim") LocalDateTime fim,
                                         @Param("status") Collection<StatusAgendamento> status);
 
+    /** Cliente (por telefone ou e-mail) que já tem uma reserva aguardando pagamento dentro do prazo. */
+    @Query("""
+            select count(a) > 0 from Agendamento a
+             where a.status = br.com.barbearia.domain.StatusAgendamento.AGUARDANDO_PAGAMENTO
+               and a.expiraEm > :agora
+               and (a.clienteTelefone = :telefone or a.clienteEmail = :email)
+            """)
+    boolean existePendenteDoCliente(@Param("telefone") String telefone,
+                                    @Param("email") String email,
+                                    @Param("agora") LocalDateTime agora);
+
     Optional<Agendamento> findByPagamentoId(String pagamentoId);
 
     List<Agendamento> findByStatus(StatusAgendamento status);

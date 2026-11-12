@@ -22,15 +22,29 @@ import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.Clock;
 
 @Configuration
 class SecurityConfig {
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SecurityConfig.class);
+
+    private static final class SecureRandomHolder {
+        private static final java.security.SecureRandom RANDOM = new java.security.SecureRandom();
+
+        static byte[] bytes(int n) {
+            byte[] b = new byte[n];
+            RANDOM.nextBytes(b);
+            return b;
+        }
+    }
+
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http, SegurancaProperties seguranca, Clock clock) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin.html", "/admin.js", "/api/admin/**").hasRole("ADMIN")
+                        // O simulador "aprova" pagamentos sem dinheiro: só a barbearia pode usá-lo.
+                        .requestMatchers("/admin.html", "/admin.js", "/api/admin/**", "/api/simulador/**").hasRole("ADMIN")
                         .anyRequest().permitAll())
                 .httpBasic(Customizer.withDefaults())
                 // CSRF só faz sentido para o painel admin (autenticado via navegador).
@@ -38,7 +52,8 @@ class SecurityConfig {
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-                        .ignoringRequestMatchers(request -> !request.getRequestURI().startsWith("/api/admin/")))
+                        .ignoringRequestMatchers(request -> !ProtecaoContraAbusoFilter.exigeLogin(request.getRequestURI())))
+                .addFilterBefore(new ProtecaoContraAbusoFilter(seguranca, clock), BasicAuthenticationFilter.class)
                 .addFilterAfter(new CarregarCsrfToken(), BasicAuthenticationFilter.class)
                 .headers(h -> h.contentSecurityPolicy(csp -> csp.policyDirectives(
                         "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; frame-ancestors 'none'")));
@@ -47,11 +62,16 @@ class SecurityConfig {
 
     @Bean
     UserDetailsService usuarios(@Value("${barbearia.admin.usuario}") String usuario,
-                                @Value("${barbearia.admin.senha}") String senha,
-                                @Value("${pagamento.provedor}") String provedor,
+                                @Value("${barbearia.admin.senha:}") String senha,
                                 PasswordEncoder encoder) {
-        if (!"simulador".equals(provedor) && senha.length() < 10) {
-            throw new IllegalStateException("Em produção defina ADMIN_SENHA com pelo menos 10 caracteres");
+        if (senha.isBlank()) {
+            // Sem senha configurada: gera uma aleatória a cada inicialização (nunca existe senha padrão).
+            senha = java.util.HexFormat.of().formatHex(SecureRandomHolder.bytes(12));
+            log.warn("\n\n  ADMIN_SENHA não definida. Senha temporária do painel ({}): {}\n", usuario, senha);
+        } else if (senha.length() < 10) {
+            throw new IllegalStateException("ADMIN_SENHA precisa ter pelo menos 10 caracteres");
+        } else if (senha.startsWith("troque-")) {
+            throw new IllegalStateException("ADMIN_SENHA ainda é a senha de exemplo do .env.exemplo: troque-a");
         }
         return new InMemoryUserDetailsManager(User.withUsername(usuario)
                 .password(encoder.encode(senha)).roles("ADMIN").build());
