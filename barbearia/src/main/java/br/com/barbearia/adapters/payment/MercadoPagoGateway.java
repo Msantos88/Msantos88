@@ -57,6 +57,11 @@ public class MercadoPagoGateway implements GatewayPagamento {
                 .header("X-Idempotency-Key", c.referencia())
                 .body(corpo)
                 .retrieve()
+                .onStatus(status -> status.isError(), (req, res) -> {
+                    String detalhe = new String(res.getBody().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+                    throw new IllegalStateException("Mercado Pago recusou a criação do PIX (HTTP "
+                            + res.getStatusCode().value() + "): " + detalhe);
+                })
                 .body(JsonNode.class);
 
         JsonNode dados = resposta.path("point_of_interaction").path("transaction_data");
@@ -72,6 +77,11 @@ public class MercadoPagoGateway implements GatewayPagamento {
         JsonNode p = http.get()
                 .uri("/v1/payments/{id}", pagamentoId)
                 .retrieve()
+                .onStatus(status -> status.isError(), (req, res) -> {
+                    String detalhe = new String(res.getBody().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+                    throw new IllegalStateException("Mercado Pago recusou a consulta do pagamento " + pagamentoId
+                            + " (HTTP " + res.getStatusCode().value() + "): " + detalhe);
+                })
                 .body(JsonNode.class);
         return new PagamentoConsultado(
                 p.path("id").asText(),

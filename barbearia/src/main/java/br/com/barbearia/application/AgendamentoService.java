@@ -32,6 +32,8 @@ public class AgendamentoService {
     private static final List<StatusAgendamento> STATUS_QUE_OCUPAM = Arrays.stream(StatusAgendamento.values())
             .filter(StatusAgendamento::ocupaHorario).toList();
 
+    static final int VENCIMENTO_MINIMO_PIX_MINUTOS = 35;
+
     private final AgendamentoRepository agendamentos;
     private final BarbeiroRepository barbeiros;
     private final ServicoRepository servicos;
@@ -97,6 +99,13 @@ public class AgendamentoService {
     public Agendamento reservar(NovoAgendamento cmd) {
         Agendamento reservado = tx.execute(status -> reservarHorario(cmd));
 
+        // O Mercado Pago exige vencimento do PIX de pelo menos 30 minutos a partir do momento em que
+        // recebe o pedido. Damos uma folga: se o PIX for pago depois que a reserva expirou, o pagamento
+        // ainda é tratado (confirma se o horário estiver livre ou marca para devolver o sinal).
+        LocalDateTime vencimentoMinimo = agora().plusMinutes(VENCIMENTO_MINIMO_PIX_MINUTOS);
+        LocalDateTime vencimentoPix = reservado.getExpiraEm().isAfter(vencimentoMinimo)
+                ? reservado.getExpiraEm() : vencimentoMinimo;
+
         CobrancaPix cobranca;
         try {
             cobranca = gateway.criarCobrancaPix(new NovaCobranca(
@@ -106,9 +115,9 @@ public class AgendamentoService {
                             + " em " + reservado.getInicio().toLocalDate(),
                     reservado.getClienteNome(),
                     reservado.getClienteEmail(),
-                    reservado.getExpiraEm().atZone(props.fusoHorario()).toOffsetDateTime()));
+                    vencimentoPix.atZone(props.fusoHorario()).toOffsetDateTime()));
         } catch (RuntimeException e) {
-            log.error("Falha ao gerar cobrança do agendamento {}", reservado.getId(), e);
+            log.error("Falha ao gerar cobrança do agendamento {}: {}", reservado.getId(), e.getMessage(), e);
             tx.executeWithoutResult(status -> agendamentos.findById(reservado.getId()).ifPresent(a -> {
                 a.cancelar();
                 agendamentos.save(a);

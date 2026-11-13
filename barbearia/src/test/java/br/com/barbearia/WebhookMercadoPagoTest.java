@@ -79,6 +79,19 @@ class WebhookMercadoPagoTest {
     }
 
     @Test
+    void vencimentoDoPixRespeitaOMinimoDoMercadoPago() {
+        var captor = org.mockito.ArgumentCaptor.forClass(GatewayPagamento.NovaCobranca.class);
+        when(gateway.criarCobrancaPix(captor.capture())).thenReturn(new GatewayPagamento.CobrancaPix("888", "pix", "qr", "url"));
+
+        service.reservar(new NovoAgendamento(1L, 1L,
+                AgendamentoFluxoTest.AGORA.withHour(17), "Caio", "11977776666", "caio@exemplo.com"));
+
+        // reserva segura o horário por 30 min, mas o PIX vence com folga (>= 30 min exigidos pelo Mercado Pago)
+        assertThat(captor.getValue().expiraEm().toLocalDateTime())
+                .isEqualTo(AgendamentoFluxoTest.AGORA.plusMinutes(35));
+    }
+
+    @Test
     void pagamentoComValorMenorQueOSinalNaoConfirma() {
         when(gateway.criarCobrancaPix(any())).thenReturn(new GatewayPagamento.CobrancaPix("777", "pix", "qr", "url"));
         Agendamento ag = service.reservar(new NovoAgendamento(1L, 1L,

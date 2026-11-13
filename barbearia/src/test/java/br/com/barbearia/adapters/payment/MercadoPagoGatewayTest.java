@@ -57,6 +57,19 @@ class MercadoPagoGatewayTest {
     }
 
     @Test
+    void erroDoMercadoPagoTrazOMotivo() {
+        servidor.expect(requestTo("https://api.mercadopago.com/v1/payments"))
+                .andRespond(org.springframework.test.web.client.response.MockRestResponseCreators
+                        .withBadRequest().contentType(MediaType.APPLICATION_JSON)
+                        .body("{\"message\":\"date_of_expiration invalid\"}"));
+
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> gateway.criarCobrancaPix(new NovaCobranca("ag-2",
+                        new BigDecimal("1.00"), "Sinal", "C", "c@exemplo.com", OffsetDateTime.now())))
+                .hasMessageContaining("HTTP 400")
+                .hasMessageContaining("date_of_expiration invalid");
+    }
+
+    @Test
     void traduzStatusDoPagamento() {
         servidor.expect(requestTo("https://api.mercadopago.com/v1/payments/987"))
                 .andExpect(method(GET))
