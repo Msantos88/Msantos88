@@ -20,7 +20,13 @@ server:
   forward-headers-strategy: native
 
 barbearia:
-  nome: ${BARBEARIA_NOME:Barbearia}
+  nome: ${BARBEARIA_NOME:Ewerton Gois}
+  slogan: ${BARBEARIA_SLOGAN:Barbearia · Desde 2010}
+  whatsapp: ${BARBEARIA_WHATSAPP:}          # só dígitos com DDD, ex.: 11912345678
+  instagram: ${BARBEARIA_INSTAGRAM:}        # usuário sem @
+  endereco: ${BARBEARIA_ENDERECO:Rua General Azevedo Pimentel, 33}
+  bairro-cidade: ${BARBEARIA_BAIRRO_CIDADE:Jardim Colonial, São Paulo/SP}
+  horario-atendimento: ${BARBEARIA_HORARIO:Terça a sábado · 9h às 19h}
   fuso-horario: America/Sao_Paulo
   percentual-sinal: 50              # % do valor pago antecipadamente para garantir a reserva
   minutos-para-pagar-sinal: 30      # tempo que o horário fica segurado aguardando o PIX

@@ -81,7 +81,7 @@ class WebhookMercadoPagoTest {
     @Test
     void pagamentoComValorMenorQueOSinalNaoConfirma() {
         when(gateway.criarCobrancaPix(any())).thenReturn(new GatewayPagamento.CobrancaPix("777", "pix", "qr", "url"));
-        Agendamento ag = service.reservar(new NovoAgendamento(1L, 2L,
+        Agendamento ag = service.reservar(new NovoAgendamento(1L, 1L,
                 AgendamentoFluxoTest.AGORA.withHour(16), "Bia", "11988887777", "bia@exemplo.com"));
         when(gateway.consultar("777")).thenReturn(new PagamentoConsultado("777", ag.getId().toString(),
                 new BigDecimal("1.00"), StatusPagamento.APROVADO));

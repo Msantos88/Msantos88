@@ -68,7 +68,8 @@ final class Dtos {
         }
     }
 
-    record InfoDto(String nome, int percentualSinal, int minutosParaPagarSinal, int diasMaximosParaAgendar,
+    record InfoDto(String nome, String slogan, String whatsapp, String instagram, String endereco,
+                   String bairroCidade, String horarioAtendimento, int percentualSinal, int minutosParaPagarSinal, int diasMaximosParaAgendar,
                    java.util.Set<java.time.DayOfWeek> diasDeFuncionamento, boolean pagamentoSimulado) {
     }
 

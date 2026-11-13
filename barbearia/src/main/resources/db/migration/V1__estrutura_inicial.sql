@@ -39,11 +39,11 @@ create index idx_agendamento_barbeiro_inicio on agendamento (barbeiro_id, inicio
 create index idx_agendamento_status on agendamento (status);
 create unique index uk_agendamento_pagamento on agendamento (pagamento_id);
 
--- Dados iniciais (edite à vontade)
+-- Dados iniciais (CONFIRMAR PREÇOS E DURAÇÕES COM A BARBEARIA antes de publicar)
 insert into servico (nome, descricao, preco, duracao_minutos) values
-    ('Corte',          'Corte masculino tradicional ou degradê', 50.00, 30),
-    ('Barba',          'Barba com toalha quente e navalha',      40.00, 30),
-    ('Corte + Barba',  'Combo completo',                         80.00, 60),
-    ('Sobrancelha',    'Design de sobrancelha na navalha',       20.00, 30);
+    ('Corte masculino',           'Degradê, social e cacheado, do jeito que você pediu.',     50.00, 30),
+    ('Corte infantil',            'Cabelo liso ou cacheado, com paciência e técnica.',         45.00, 30),
+    ('Barba na navalha',          'Alinhamento e acabamento preciso.',                         40.00, 30),
+    ('Barba com vapor de ozônio', 'Amolece os fios, facilita o barbear e dá mais conforto.',   50.00, 30);
 
-insert into barbeiro (nome) values ('João'), ('Pedro');
+insert into barbeiro (nome) values ('Ewerton');

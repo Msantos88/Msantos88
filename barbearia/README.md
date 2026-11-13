@@ -1,4 +1,4 @@
-# Barbearia: agendamento com sinal de 50% via PIX
+# Ewerton Gois Barbearia: agendamento com sinal de 50% via PIX
 
 Site responsivo (funciona como app no celular, com opção "Adicionar à tela inicial") onde o cliente:
 
@@ -76,6 +76,17 @@ docker run -p 8080:8080 --env-file .env barbearia
 ```
 
 O site precisa estar em **HTTPS**. Passo a passo para a Hostinger (VPS + Docker Compose + HTTPS automático): [DEPLOY-HOSTINGER.md](DEPLOY-HOSTINGER.md).
+
+## Identidade visual
+
+O site segue a identidade da barbearia: fundo preto, dourado `#d3af60`, títulos em **Cinzel** e textos em
+**Jost** (fontes livres, hospedadas no próprio site em `static/fontes/`). Para mudar:
+
+- **Logo:** salve a logo como `src/main/resources/static/logo.png` (quadrada, de preferência 400×400 px ou
+  maior, fundo preto). Sem esse arquivo, o site mostra um monograma dourado com as iniciais do nome.
+- **Nome, slogan, endereço, horário, WhatsApp e Instagram:** variáveis `BARBEARIA_*` no `.env`
+  (veja `.env.exemplo`). WhatsApp e Instagram vazios escondem os botões.
+- **Cores:** variáveis no topo de `src/main/resources/static/estilo.css` (`--ouro`, `--bg` etc.).
 
 ## Personalização
 

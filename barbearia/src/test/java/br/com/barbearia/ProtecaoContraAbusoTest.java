@@ -113,7 +113,7 @@ class ProtecaoContraAbusoTest {
 
     private org.springframework.test.web.servlet.RequestBuilder reserva(String ip, String inicio, String telefone) {
         return post("/api/agendamentos").with(ip(ip)).contentType(MediaType.APPLICATION_JSON).content("""
-                {"servicoId":1,"barbeiroId":2,"inicio":"%s",
+                {"servicoId":1,"barbeiroId":1,"inicio":"%s",
                  "clienteNome":"Robô","clienteTelefone":"%s","clienteEmail":"%s@exemplo.com"}
                 """.formatted(inicio, telefone, telefone));
     }

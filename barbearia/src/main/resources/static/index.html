@@ -3,15 +3,34 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#16130f">
-  <title>Agendamento | Barbearia</title>
+  <meta name="theme-color" content="#0a0a0a">
+  <title>Agendamento</title>
+  <link rel="preload" href="fontes/cinzel.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fontes/jost.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="estilo.css">
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icone.svg" type="image/svg+xml">
 </head>
 <body>
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-relogio" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-msg" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-tesoura" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/></symbol>
+  <symbol id="i-insta" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-copiar" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+</svg>
+
 <header class="topo">
-  <div class="marca"><span class="poste" aria-hidden="true"></span><h1 id="nome-barbearia">Barbearia</h1></div>
-  <p class="sub">Agende seu horário. Garanta com <strong id="pct-sinal">50%</strong> de sinal via PIX.</p>
+  <img id="logo" class="logo" alt="" hidden>
+  <div id="monograma" class="monograma" aria-hidden="true"><b id="iniciais"></b><small id="mono-nome"></small></div>
+  <h1 class="nome" id="nome-barbearia">Barbearia</h1>
+  <div class="divisor" aria-hidden="true"><svg class="ic"><use href="#i-tesoura"/></svg></div>
+  <p class="slogan" id="slogan"></p>
+  <span class="selo-topo"><svg class="ic"><use href="#i-relogio"/></svg>Atendimento com hora marcada</span>
+  <p class="sub">Garanta seu horário com <strong id="pct-sinal">50%</strong> de sinal via PIX.</p>
 </header>
 
 <main class="container">
@@ -26,11 +45,15 @@
 
   <!-- 1. Serviço e barbeiro -->
   <section id="etapa-1" class="etapa">
-    <h2>Escolha o serviço</h2>
-    <div id="lista-servicos" class="cards"></div>
-    <h2>Com quem?</h2>
-    <div id="lista-barbeiros" class="chips"></div>
-    <div class="acoes"><button id="ir-2" class="btn" disabled>Continuar</button></div>
+    <h2>Serviços</h2>
+    <div id="lista-servicos" class="servicos"></div>
+    <div id="bloco-barbeiros">
+      <h2>Com quem?</h2>
+      <div id="lista-barbeiros" class="chips"></div>
+    </div>
+    <div class="acoes">
+      <button id="ir-2" class="btn" disabled><svg class="ic"><use href="#i-cal"/></svg>Agendar meu horário</button>
+    </div>
   </section>
 
   <!-- 2. Data e horário -->
@@ -74,7 +97,7 @@
         <label>PIX copia e cola
           <textarea id="pix-codigo" readonly rows="3"></textarea>
         </label>
-        <button id="btn-copiar" class="btn">Copiar código</button>
+        <button id="btn-copiar" class="btn"><svg class="ic"><use href="#i-copiar"/></svg><span>Copiar código</span></button>
         <a id="pix-link" class="link" target="_blank" rel="noopener" hidden>Abrir página do pagamento</a>
       </div>
       <p class="contador">Pague em até <strong id="contador">--:--</strong> para garantir o horário.</p>
@@ -98,6 +121,19 @@
     </div>
   </section>
 </main>
+
+<section class="contato" id="contato" hidden>
+  <h2>Onde e quando</h2>
+  <div class="local">
+    <div id="local-endereco" hidden><svg class="ic"><use href="#i-pin"/></svg><span><b id="endereco"></b><small id="bairro-cidade"></small></span></div>
+    <div id="local-horario" hidden><svg class="ic"><use href="#i-relogio"/></svg><span><b id="horario-atendimento"></b><small>Atendimento com hora marcada</small></span></div>
+  </div>
+  <div class="botoes">
+    <a id="btn-whatsapp" class="btn sec" target="_blank" rel="noopener" hidden><svg class="ic"><use href="#i-msg"/></svg>Chamar no WhatsApp</a>
+    <a id="btn-mapa" class="btn sec" target="_blank" rel="noopener" hidden><svg class="ic"><use href="#i-pin"/></svg>Como chegar</a>
+    <a id="btn-instagram" class="btn sec" target="_blank" rel="noopener" hidden><svg class="ic"><use href="#i-insta"/></svg>Ver no Instagram</a>
+  </div>
+</section>
 
 <footer class="rodape"><a href="admin.html">Área da barbearia</a></footer>
 <script src="app.js"></script>

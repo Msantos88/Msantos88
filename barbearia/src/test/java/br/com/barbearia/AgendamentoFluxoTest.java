@@ -38,8 +38,8 @@ class AgendamentoFluxoTest {
 
     /** Terça-feira, 17/11/2026, 08:00 em São Paulo. */
     static final LocalDateTime AGORA = LocalDateTime.of(2026, 11, 17, 8, 0);
-    static final Long CORTE = 1L;          // R$ 50,00 / 30 min (seed)
-    static final Long CORTE_E_BARBA = 3L;  // R$ 80,00 / 60 min
+    static final Long CORTE = 1L;          // Corte masculino: R$ 50,00 / 30 min (seed)
+    static final Long CORTE_INFANTIL = 2L; // R$ 45,00 / 30 min
     static final Long JOAO = 1L;
     static final Long PEDRO = 2L;
 
@@ -59,8 +59,13 @@ class AgendamentoFluxoTest {
     @Autowired AgendamentoService service;
     @Autowired SimuladorGateway simulador;
 
+    @Autowired br.com.barbearia.application.BarbeiroRepository barbeiros;
+
     @BeforeEach
     void limpar() {
+        if (barbeiros.count() < 2) {
+            barbeiros.save(new br.com.barbearia.domain.Barbeiro("Segundo"));
+        }
         repositorio.deleteAll();
         relogio.definir(AGORA);
     }
@@ -82,7 +87,7 @@ class AgendamentoFluxoTest {
 
         // ninguém mais consegue reservar o mesmo horário (nem sobrepondo)
         mvc.perform(post("/api/agendamentos").contentType(MediaType.APPLICATION_JSON)
-                        .content(corpo(CORTE_E_BARBA, JOAO, "2026-11-17T09:30:00")))
+                        .content(corpo(CORTE_INFANTIL, JOAO, "2026-11-17T10:00:00")))
                 .andExpect(status().isUnprocessableEntity());
     }
 

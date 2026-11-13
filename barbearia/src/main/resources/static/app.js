@@ -60,6 +60,62 @@ function el(tag, attrs = {}, ...filhos) {
   return e;
 }
 
+function icone(id) {
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('class', 'ic');
+  const use = document.createElementNS(ns, 'use');
+  use.setAttribute('href', '#' + id);
+  svg.append(use);
+  return svg;
+}
+
+function aplicarMarca(info) {
+  document.title = `Agendamento | ${info.nome}`;
+  $('#nome-barbearia').textContent = info.nome;
+  $('#slogan').textContent = info.slogan || '';
+  $('#slogan').hidden = !info.slogan;
+  $('#pct-sinal').textContent = info.percentualSinal + '%';
+
+  // Monograma com as iniciais; se existir logo.png, usa a logo do cliente.
+  const palavras = info.nome.trim().split(/\s+/);
+  $('#iniciais').textContent = palavras.slice(0, 2).map((p) => p[0]).join('').toUpperCase();
+  $('#mono-nome').textContent = info.nome.toUpperCase();
+  fetch('logo.png', { method: 'HEAD' }).then((r) => {
+    if (r.ok && (r.headers.get('content-type') || '').startsWith('image/')) {
+      $('#logo').src = 'logo.png';
+      $('#logo').alt = info.nome;
+      $('#logo').hidden = false;
+      $('#monograma').hidden = true;
+    }
+  }).catch(() => {});
+
+  // Onde e quando
+  const temEndereco = !!info.endereco;
+  $('#local-endereco').hidden = !temEndereco;
+  $('#endereco').textContent = info.endereco || '';
+  $('#bairro-cidade').textContent = info.bairroCidade || '';
+  $('#local-horario').hidden = !info.horarioAtendimento;
+  $('#horario-atendimento').textContent = info.horarioAtendimento || '';
+  if (temEndereco) {
+    $('#btn-mapa').href = 'https://www.google.com/maps/search/?api=1&query=' +
+      encodeURIComponent([info.endereco, info.bairroCidade].filter(Boolean).join(', '));
+    $('#btn-mapa').hidden = false;
+  }
+  if (info.whatsapp) {
+    const digitos = info.whatsapp.replace(/\D/g, '');
+    const numero = digitos.length <= 11 ? '55' + digitos : digitos;
+    $('#btn-whatsapp').href = `https://wa.me/${numero}?text=` +
+      encodeURIComponent(`Olá! Vim pelo site de agendamento da ${info.nome}.`);
+    $('#btn-whatsapp').hidden = false;
+  }
+  if (info.instagram) {
+    $('#btn-instagram').href = 'https://instagram.com/' + encodeURIComponent(info.instagram.replace(/^@/, ''));
+    $('#btn-instagram').hidden = false;
+  }
+  $('#contato').hidden = !(temEndereco || info.horarioAtendimento || info.whatsapp || info.instagram);
+}
+
 function resumo(linhas) {
   const dl = el('dl');
   for (const [rotulo, valor, destaque] of linhas) {
@@ -83,12 +139,21 @@ async function carregarEtapa1() {
   const [servicos, barbeiros] = await Promise.all([api('/servicos'), api('/barbeiros')]);
   const ls = $('#lista-servicos');
   ls.replaceChildren(...servicos.map((s) => {
-    const b = el('button', { class: 'card', type: 'button' },
-      el('div', { class: 'nome' }, s.nome),
-      el('div', { class: 'desc' }, s.descricao || ''),
-      el('div', { class: 'preco' }, el('b', {}, brl(s.preco)), el('span', { class: 'dur' }, `${s.duracaoMinutos} min`)),
+    const marca = el('span', { class: 'marca', 'aria-hidden': 'true' }, icone('i-check'));
+    const b = el('button', { class: 'servico', type: 'button', 'aria-pressed': 'false' },
+      el('span', { class: 'info' },
+        el('span', { class: 'nome-servico' }, s.nome),
+        el('span', { class: 'desc' }, s.descricao || '')),
+      el('span', { class: 'preco' }, el('b', {}, brl(s.preco)), el('small', {}, `${s.duracaoMinutos} min`)),
+      marca,
     );
-    b.addEventListener('click', () => { estado.servico = s; selecionarUnico(ls, b); atualizarBotao1(); });
+    b.addEventListener('click', () => {
+      estado.servico = s;
+      ls.querySelectorAll('.servico').forEach((x) => x.setAttribute('aria-pressed', 'false'));
+      b.setAttribute('aria-pressed', 'true');
+      selecionarUnico(ls, b);
+      atualizarBotao1();
+    });
     return b;
   }));
 
@@ -99,6 +164,8 @@ async function carregarEtapa1() {
     return b;
   });
   lb.replaceChildren(...opcoes);
+  // Barbearia com um só profissional: não precisa perguntar "com quem?"
+  $('#bloco-barbeiros').hidden = barbeiros.length === 1;
   if (barbeiros.length === 1) opcoes[0].click();
 }
 
@@ -275,8 +342,8 @@ async function copiarPix() {
     campo.select();
     document.execCommand('copy');
   }
-  $('#btn-copiar').textContent = 'Copiado!';
-  setTimeout(() => { $('#btn-copiar').textContent = 'Copiar código'; }, 2000);
+  $('#btn-copiar span').textContent = 'Copiado!';
+  setTimeout(() => { $('#btn-copiar span').textContent = 'Copiar código'; }, 2000);
 }
 
 async function simularPagamento() {
@@ -292,9 +359,7 @@ async function simularPagamento() {
 async function iniciar() {
   try {
     estado.info = await api('/info');
-    document.title = `Agendamento | ${estado.info.nome}`;
-    $('#nome-barbearia').textContent = estado.info.nome;
-    $('#pct-sinal').textContent = estado.info.percentualSinal + '%';
+    aplicarMarca(estado.info);
 
     $('#ir-2').addEventListener('click', () => { montarDias(); $('#lista-horarios').replaceChildren(el('p', { class: 'vazio' }, 'Selecione um dia.')); irPara(2); });
     $('#ir-3').addEventListener('click', () => { prepararEtapa3(); irPara(3); });

@@ -54,13 +54,14 @@ class PublicoController {
 
     @GetMapping("/info")
     InfoDto info() {
-        return new InfoDto(props.nome(), props.percentualSinal(), props.minutosParaPagarSinal(),
+        return new InfoDto(props.nome(), props.slogan(), props.whatsapp(), props.instagram(),
+                props.endereco(), props.bairroCidade(), props.horarioAtendimento(), props.percentualSinal(), props.minutosParaPagarSinal(),
                 props.diasMaximosParaAgendar(), props.diasDeFuncionamento(), simulado);
     }
 
     @GetMapping("/servicos")
     List<ServicoDto> servicos() {
-        return servicos.findByAtivoTrueOrderByNome().stream()
+        return servicos.findByAtivoTrueOrderById().stream()
                 .map(s -> Dtos.servico(s, politica.calcularSinal(s.getPreco())))
                 .toList();
     }
