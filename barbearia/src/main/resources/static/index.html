@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#16130f">
+  <title>Agendamento | Barbearia</title>
+  <link rel="stylesheet" href="estilo.css">
+  <link rel="manifest" href="manifest.webmanifest">
+</head>
+<body>
+<header class="topo">
+  <div class="marca"><span class="poste" aria-hidden="true"></span><h1 id="nome-barbearia">Barbearia</h1></div>
+  <p class="sub">Agende seu horário. Garanta com <strong id="pct-sinal">50%</strong> de sinal via PIX.</p>
+</header>
+
+<main class="container">
+  <ol class="passos" aria-label="Etapas">
+    <li data-passo="1" class="ativo">Serviço</li>
+    <li data-passo="2">Horário</li>
+    <li data-passo="3">Seus dados</li>
+    <li data-passo="4">Pagamento</li>
+  </ol>
+
+  <div id="erro" class="erro" role="alert" hidden></div>
+
+  <!-- 1. Serviço e barbeiro -->
+  <section id="etapa-1" class="etapa">
+    <h2>Escolha o serviço</h2>
+    <div id="lista-servicos" class="cards"></div>
+    <h2>Com quem?</h2>
+    <div id="lista-barbeiros" class="chips"></div>
+    <div class="acoes"><button id="ir-2" class="btn" disabled>Continuar</button></div>
+  </section>
+
+  <!-- 2. Data e horário -->
+  <section id="etapa-2" class="etapa" hidden>
+    <h2>Escolha o dia</h2>
+    <div id="lista-dias" class="dias"></div>
+    <h2>Horários disponíveis</h2>
+    <div id="lista-horarios" class="chips"><p class="vazio">Selecione um dia.</p></div>
+    <div class="acoes">
+      <button class="btn sec" data-voltar="1">Voltar</button>
+      <button id="ir-3" class="btn" disabled>Continuar</button>
+    </div>
+  </section>
+
+  <!-- 3. Dados do cliente -->
+  <section id="etapa-3" class="etapa" hidden>
+    <h2>Seus dados</h2>
+    <div class="resumo" id="resumo"></div>
+    <form id="form-cliente" novalidate>
+      <label>Nome<input name="clienteNome" required maxlength="100" autocomplete="name"></label>
+      <label>WhatsApp / Telefone<input name="clienteTelefone" required inputmode="tel" placeholder="(11) 91234-5678" autocomplete="tel"></label>
+      <label>E-mail<input name="clienteEmail" type="email" required maxlength="150" autocomplete="email"></label>
+      <p class="aviso">Você vai pagar agora <strong id="valor-sinal-form"></strong> de sinal via PIX.
+        O restante (<span id="valor-restante-form"></span>) é pago na barbearia.
+        O horário fica reservado por <span id="minutos-pagar"></span> minutos aguardando o pagamento.</p>
+      <div class="acoes">
+        <button type="button" class="btn sec" data-voltar="2">Voltar</button>
+        <button type="submit" class="btn" id="btn-reservar">Reservar e pagar sinal</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- 4. Pagamento / status -->
+  <section id="etapa-4" class="etapa" hidden>
+    <div id="pagamento-pendente" hidden>
+      <h2>Pague o sinal com PIX</h2>
+      <div class="resumo" id="resumo-pagamento"></div>
+      <div class="pix">
+        <img id="pix-qr" alt="QR Code PIX" hidden>
+        <p class="sem-qr" id="pix-sem-qr" hidden>Use o código copia e cola abaixo no app do seu banco.</p>
+        <label>PIX copia e cola
+          <textarea id="pix-codigo" readonly rows="3"></textarea>
+        </label>
+        <button id="btn-copiar" class="btn">Copiar código</button>
+        <a id="pix-link" class="link" target="_blank" rel="noopener" hidden>Abrir página do pagamento</a>
+      </div>
+      <p class="contador">Pague em até <strong id="contador">--:--</strong> para garantir o horário.</p>
+      <p class="aguardando"><span class="spinner" aria-hidden="true"></span> Aguardando confirmação do pagamento…</p>
+      <button id="btn-simular" class="btn sec" hidden>Simular pagamento (teste, exige login do painel)</button>
+    </div>
+
+    <div id="pagamento-ok" hidden class="status ok">
+      <div class="icone" aria-hidden="true">✓</div>
+      <h2>Horário garantido!</h2>
+      <div class="resumo" id="resumo-ok"></div>
+      <p>Guarde este link para consultar seu agendamento:</p>
+      <input id="link-agendamento" readonly>
+    </div>
+
+    <div id="pagamento-falhou" hidden class="status falha">
+      <div class="icone" aria-hidden="true">!</div>
+      <h2 id="falha-titulo">Reserva expirada</h2>
+      <p id="falha-texto">O prazo para pagar o sinal terminou e o horário foi liberado.</p>
+      <a href="./" class="btn">Fazer novo agendamento</a>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape"><a href="admin.html">Área da barbearia</a></footer>
+<script src="app.js"></script>
+</body>
+</html>
