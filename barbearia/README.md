@@ -10,8 +10,10 @@ Site responsivo (funciona como app no celular, com opção "Adicionar à tela in
 O horário fica **segurado por 30 minutos** aguardando o PIX. Se o pagamento não chegar nesse prazo, a reserva
 expira e o horário volta a ficar disponível. A confirmação aparece sozinha na tela assim que o PIX é pago.
 
-A barbearia tem um painel (`/admin.html`) com a agenda do dia, os sinais recebidos, o valor a receber no
-balcão, link direto para o WhatsApp do cliente e botões para concluir ou cancelar atendimentos.
+A barbearia tem um painel (`/admin.html`) com a agenda do dia (com filtro por barbeiro), os sinais recebidos,
+o valor a receber no balcão, link direto para o WhatsApp do cliente e botões para concluir ou cancelar
+atendimentos. Na aba **Barbeiros** é possível incluir, renomear, desativar e reativar barbeiros: quando há mais
+de um ativo, o cliente escolhe com quem quer ser atendido.
 
 | Serviço | Horário | Pagamento PIX | Confirmado |
 |---|---|---|---|
@@ -82,8 +84,9 @@ O site precisa estar em **HTTPS**. Passo a passo para a Hostinger (VPS + Docker 
 O site segue a identidade da barbearia: fundo preto, dourado `#d3af60`, títulos em **Cinzel** e textos em
 **Jost** (fontes livres, hospedadas no próprio site em `static/fontes/`). Para mudar:
 
-- **Logo:** salve a logo como `src/main/resources/static/logo.png` (quadrada, de preferência 400×400 px ou
-  maior, fundo preto). Sem esse arquivo, o site mostra um monograma dourado com as iniciais do nome.
+- **Logo:** `src/main/resources/static/logo.png` (quadrada, fundo preto, exibida num círculo com borda dourada).
+  Sem esse arquivo, o site mostra um monograma dourado com as iniciais do nome. Os ícones do app ficam em
+  `icone-192.png` e `icone-512.png`.
 - **Nome, slogan, endereço, horário, WhatsApp e Instagram:** variáveis `BARBEARIA_*` no `.env`
   (veja `.env.exemplo`). WhatsApp e Instagram vazios escondem os botões.
 - **Cores:** variáveis no topo de `src/main/resources/static/estilo.css` (`--ouro`, `--bg` etc.).

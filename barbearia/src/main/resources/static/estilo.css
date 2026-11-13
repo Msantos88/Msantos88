@@ -48,7 +48,11 @@ svg.ic { width: 20px; height: 20px; flex: 0 0 auto; stroke: currentColor; fill: 
 
 /* ---------- topo / marca ---------- */
 .topo { padding: 2.25rem 16px 1.25rem; text-align: center; }
-.logo { width: 112px; height: 112px; margin: 0 auto 1.1rem; display: block; border-radius: 50%; object-fit: cover; }
+.logo {
+  width: 136px; height: 136px; margin: 0 auto 1.1rem; display: block; border-radius: 50%; object-fit: cover;
+  background: #000; border: 2px solid var(--ouro);
+  box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px var(--ouro-escuro), 0 10px 36px rgba(211, 175, 96, .16);
+}
 .monograma {
   width: 112px; height: 112px; margin: 0 auto 1.1rem; border-radius: 50%;
   display: grid; place-items: center; align-content: center; gap: 2px;
@@ -224,6 +228,25 @@ textarea { font-family: ui-monospace, monospace; font-size: .8rem; resize: none;
 .rodape a { color: var(--texto-2); }
 
 /* ---------- admin ---------- */
+.abas { display: flex; gap: 6px; border-bottom: 1px solid var(--borda); margin: .5rem 0 1rem; }
+.aba {
+  background: none; border: 0; border-bottom: 2px solid transparent; color: var(--texto-2); font: inherit;
+  font-weight: 500; letter-spacing: .06em; text-transform: uppercase; font-size: .85rem;
+  padding: 10px 14px; cursor: pointer; margin-bottom: -1px;
+}
+.aba.ativa { color: var(--texto); border-color: var(--ouro); }
+select {
+  display: block; margin-top: 4px; background: var(--card); border: 1px solid var(--borda-forte); color: var(--texto);
+  font: inherit; padding: 12px 14px; border-radius: 12px;
+}
+.equipe { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--borda); }
+.equipe li { display: flex; align-items: center; gap: 10px; padding: 12px 4px; border-bottom: 1px solid var(--borda); flex-wrap: wrap; }
+.equipe .quem { flex: 1; min-width: 140px; font-weight: 500; }
+.equipe .inativo .quem { color: var(--texto-2); text-decoration: line-through; }
+.equipe .acoes-linha { display: flex; gap: 6px; }
+.linha-form { display: flex; gap: 10px; margin-bottom: 1rem; }
+.linha-form input { margin: 0; flex: 1; }
+.linha-form .btn { flex: 0 0 auto; }
 .topo.compacto { padding: 1.5rem 16px 1rem; border-bottom: 1px solid var(--borda); }
 .topo.compacto .nome { font-size: 1.3rem; }
 .tabela { width: 100%; border-collapse: collapse; font-size: .9rem; }

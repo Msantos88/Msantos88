@@ -89,6 +89,11 @@ consegue simular pagamentos. Assim você valida horários, telas e painel antes 
    docker compose exec db psql -U barbearia -c "update servico set ativo = false where nome = 'Teste';"
    ```
 
+## Incluir barbeiros
+
+Pelo painel: `https://agendar.seudominio.com.br/admin.html` → aba **Barbeiros** → digite o nome → **Incluir**.
+Com mais de um barbeiro ativo, o cliente passa a escolher com quem quer ser atendido.
+
 ## Comandos úteis
 
 ```bash

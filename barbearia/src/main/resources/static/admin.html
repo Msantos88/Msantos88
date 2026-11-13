@@ -4,22 +4,30 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0a0a0a">
-  <link rel="icon" href="icone.svg" type="image/svg+xml">
-  <title>Agenda | Barbearia</title>
+  <link rel="icon" href="icone-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icone-192.png">
+  <title>Painel | Barbearia</title>
   <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
 <header class="topo compacto">
-  <h1 class="nome">Agenda do dia</h1>
+  <h1 class="nome">Painel</h1>
 </header>
 <main class="container">
+  <nav class="abas" aria-label="Seções do painel">
+    <button class="aba ativa" data-aba="agenda" aria-current="page">Agenda</button>
+    <button class="aba" data-aba="barbeiros">Barbeiros</button>
+  </nav>
+  <div id="erro" class="erro" role="alert" hidden></div>
+
+  <section id="aba-agenda">
   <div class="filtro">
     <label>Data<input type="date" id="data"></label>
     <button class="btn sec" id="anterior" aria-label="Dia anterior">‹</button>
     <button class="btn sec" id="hoje">Hoje</button>
     <button class="btn sec" id="proximo" aria-label="Próximo dia">›</button>
+    <label id="filtro-barbeiro-rotulo" hidden>Barbeiro<select id="filtro-barbeiro"><option value="">Todos</option></select></label>
   </div>
-  <div id="erro" class="erro" role="alert" hidden></div>
   <div class="totais">
     <div><small>Confirmados</small><b id="t-confirmados">0</b></div>
     <div><small>Sinais recebidos</small><b id="t-sinais">R$ 0,00</b></div>
@@ -32,6 +40,20 @@
     </table>
   </div>
   <p id="vazio" class="vazio" hidden>Nenhum agendamento neste dia.</p>
+  </section>
+
+  <section id="aba-barbeiros" hidden>
+    <h2>Equipe</h2>
+    <ul id="lista-equipe" class="equipe"></ul>
+    <h2>Incluir barbeiro</h2>
+    <form id="form-barbeiro" class="linha-form">
+      <input name="nome" required maxlength="60" placeholder="Nome do barbeiro" aria-label="Nome do barbeiro" autocomplete="off">
+      <button class="btn" type="submit">Incluir</button>
+    </form>
+    <p class="aviso">Barbeiros ativos aparecem para o cliente escolher na página de agendamento.
+      Com um só barbeiro ativo, essa pergunta não aparece. Desativar tira o barbeiro da página de agendamento
+      e mantém o histórico; só é possível quando ele não tem agendamentos futuros.</p>
+  </section>
 </main>
 <footer class="rodape"><a href="./">Página de agendamento</a></footer>
 <script src="admin.js"></script>

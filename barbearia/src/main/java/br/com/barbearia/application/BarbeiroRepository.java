@@ -14,6 +14,10 @@ public interface BarbeiroRepository extends JpaRepository<Barbeiro, Long> {
 
     List<Barbeiro> findByAtivoTrueOrderByNome();
 
+    List<Barbeiro> findAllByOrderByAtivoDescNomeAsc();
+
+    boolean existsByNomeIgnoreCase(String nome);
+
     /**
      * Trava a linha do barbeiro durante a transação para serializar reservas
      * concorrentes e impedir que dois clientes peguem o mesmo horário.

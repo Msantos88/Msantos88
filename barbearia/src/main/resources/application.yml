@@ -22,8 +22,8 @@ server:
 barbearia:
   nome: ${BARBEARIA_NOME:Ewerton Gois}
   slogan: ${BARBEARIA_SLOGAN:Barbearia · Desde 2010}
-  whatsapp: ${BARBEARIA_WHATSAPP:}          # só dígitos com DDD, ex.: 11912345678
-  instagram: ${BARBEARIA_INSTAGRAM:}        # usuário sem @
+  whatsapp: ${BARBEARIA_WHATSAPP:11954877719}          # só dígitos com DDD, ex.: 11912345678
+  instagram: ${BARBEARIA_INSTAGRAM:ewetongois_00}        # usuário sem @
   endereco: ${BARBEARIA_ENDERECO:Rua General Azevedo Pimentel, 33}
   bairro-cidade: ${BARBEARIA_BAIRRO_CIDADE:Jardim Colonial, São Paulo/SP}
   horario-atendimento: ${BARBEARIA_HORARIO:Terça a sábado · 9h às 19h}

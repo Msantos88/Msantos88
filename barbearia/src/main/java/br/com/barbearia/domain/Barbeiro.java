@@ -23,6 +23,18 @@ public class Barbeiro {
         this.nome = nome;
     }
 
+    public void renomear(String novoNome) {
+        this.nome = novoNome;
+    }
+
+    public void desativar() {
+        this.ativo = false;
+    }
+
+    public void ativar() {
+        this.ativo = true;
+    }
+
     public Long getId() { return id; }
     public String getNome() { return nome; }
     public boolean isAtivo() { return ativo; }

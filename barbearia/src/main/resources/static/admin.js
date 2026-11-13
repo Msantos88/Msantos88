@@ -53,7 +53,9 @@ async function carregar() {
   const erro = $('#erro');
   erro.hidden = true;
   try {
-    const lista = await api('/agendamentos?data=' + $('#data').value);
+    const filtro = $('#filtro-barbeiro').value;
+    const lista = (await api('/agendamentos?data=' + $('#data').value))
+      .filter((a) => !filtro || a.barbeiro === filtro);
     const visiveis = lista.filter((a) => a.status !== 'EXPIRADO');
     $('#vazio').hidden = visiveis.length > 0;
     $('#linhas').replaceChildren(...visiveis.map((a) => {
@@ -111,10 +113,178 @@ function hojeLocal() {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+// ---------------------------------------------------------------- abas
+
+function mostrarAba(nome) {
+  document.querySelectorAll('.aba').forEach((b) => {
+    const ativa = b.dataset.aba === nome;
+    b.classList.toggle('ativa', ativa);
+    if (ativa) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  });
+  $('#aba-agenda').hidden = nome !== 'agenda';
+  $('#aba-barbeiros').hidden = nome !== 'barbeiros';
+  $('#erro').hidden = true;
+  if (nome === 'barbeiros') carregarEquipe();
+}
+
+// ---------------------------------------------------------------- barbeiros
+
+function mostrarErro(msg) {
+  $('#erro').textContent = msg;
+  $('#erro').hidden = false;
+}
+
+async function mudarBarbeiro(caminho, opcoes) {
+  try {
+    await api('/barbeiros' + caminho, opcoes);
+    $('#erro').hidden = true;
+    await carregarEquipe();
+  } catch (e) {
+    mostrarErro(e.message);
+  }
+}
+
+async function carregarEquipe() {
+  try {
+    const equipe = await api('/barbeiros');
+    atualizarFiltroBarbeiro(equipe);
+    $('#lista-equipe').replaceChildren(...equipe.map((b) => {
+      const li = document.createElement('li');
+      if (!b.ativo) li.className = 'inativo';
+      const nome = document.createElement('span');
+      nome.className = 'quem';
+      nome.textContent = b.nome;
+      const selo = document.createElement('span');
+      selo.className = 'selo ' + (b.ativo ? 'CONFIRMADO' : 'CANCELADO');
+      selo.textContent = b.ativo ? 'Ativo' : 'Inativo';
+      const acoes = document.createElement('span');
+      acoes.className = 'acoes-linha';
+      acoes.append(botao('Renomear', () => {
+        const novo = prompt('Novo nome:', b.nome);
+        if (novo && novo.trim() && novo.trim() !== b.nome) {
+          mudarBarbeiro('/' + b.id, { method: 'PUT', body: JSON.stringify({ nome: novo.trim() }) });
+        }
+      }));
+      acoes.append(b.ativo
+        ? botao('Desativar', () => confirm(`Tirar ${b.nome} da página de agendamento?`)
+            && mudarBarbeiro(`/${b.id}/desativar`, { method: 'POST' }))
+        : botao('Reativar', () => mudarBarbeiro(`/${b.id}/ativar`, { method: 'POST' })));
+      li.append(nome, selo, acoes);
+      return li;
+    }));
+  } catch (e) {
+    mostrarErro(e.message);
+  }
+}
+
+function atualizarFiltroBarbeiro(equipe) {
+  const sel = $('#filtro-barbeiro');
+  const atual = sel.value;
+  const opcoes = [new Option('Todos', '')].concat(equipe.map((b) => new Option(b.nome, b.nome)));
+  sel.replaceChildren(...opcoes);
+  sel.value = equipe.some((b) => b.nome === atual) ? atual : '';
+  $('#filtro-barbeiro-rotulo').hidden = equipe.length < 2;
+}
+
+$('#form-barbeiro').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const campo = ev.target.nome;
+  if (!campo.value.trim()) return;
+  await mudarBarbeiro('', { method: 'POST', body: JSON.stringify({ nome: campo.value.trim() }) });
+  if ($('#erro').hidden) campo.value = '';
+});
+document.querySelectorAll('.aba').forEach((b) => b.addEventListener('click', () => mostrarAba(b.dataset.aba)));
+$('#filtro-barbeiro').addEventListener('change', carregar);
+api('/barbeiros').then(atualizarFiltroBarbeiro).catch(() => {});
+
 $('#data').value = hojeLocal();
 $('#data').addEventListener('change', carregar);
 $('#anterior').addEventListener('click', () => mudarDia(-1));
 $('#proximo').addEventListener('click', () => mudarDia(1));
-$('#hoje').addEventListener('click', () => { $('#data').value = hojeLocal(); carregar(); });
+$('#hoje').addEventListener('click', () => { // ---------------------------------------------------------------- abas
+
+function mostrarAba(nome) {
+  document.querySelectorAll('.aba').forEach((b) => {
+    const ativa = b.dataset.aba === nome;
+    b.classList.toggle('ativa', ativa);
+    if (ativa) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  });
+  $('#aba-agenda').hidden = nome !== 'agenda';
+  $('#aba-barbeiros').hidden = nome !== 'barbeiros';
+  $('#erro').hidden = true;
+  if (nome === 'barbeiros') carregarEquipe();
+}
+
+// ---------------------------------------------------------------- barbeiros
+
+function mostrarErro(msg) {
+  $('#erro').textContent = msg;
+  $('#erro').hidden = false;
+}
+
+async function mudarBarbeiro(caminho, opcoes) {
+  try {
+    await api('/barbeiros' + caminho, opcoes);
+    $('#erro').hidden = true;
+    await carregarEquipe();
+  } catch (e) {
+    mostrarErro(e.message);
+  }
+}
+
+async function carregarEquipe() {
+  try {
+    const equipe = await api('/barbeiros');
+    atualizarFiltroBarbeiro(equipe);
+    $('#lista-equipe').replaceChildren(...equipe.map((b) => {
+      const li = document.createElement('li');
+      if (!b.ativo) li.className = 'inativo';
+      const nome = document.createElement('span');
+      nome.className = 'quem';
+      nome.textContent = b.nome;
+      const selo = document.createElement('span');
+      selo.className = 'selo ' + (b.ativo ? 'CONFIRMADO' : 'CANCELADO');
+      selo.textContent = b.ativo ? 'Ativo' : 'Inativo';
+      const acoes = document.createElement('span');
+      acoes.className = 'acoes-linha';
+      acoes.append(botao('Renomear', () => {
+        const novo = prompt('Novo nome:', b.nome);
+        if (novo && novo.trim() && novo.trim() !== b.nome) {
+          mudarBarbeiro('/' + b.id, { method: 'PUT', body: JSON.stringify({ nome: novo.trim() }) });
+        }
+      }));
+      acoes.append(b.ativo
+        ? botao('Desativar', () => confirm(`Tirar ${b.nome} da página de agendamento?`)
+            && mudarBarbeiro(`/${b.id}/desativar`, { method: 'POST' }))
+        : botao('Reativar', () => mudarBarbeiro(`/${b.id}/ativar`, { method: 'POST' })));
+      li.append(nome, selo, acoes);
+      return li;
+    }));
+  } catch (e) {
+    mostrarErro(e.message);
+  }
+}
+
+function atualizarFiltroBarbeiro(equipe) {
+  const sel = $('#filtro-barbeiro');
+  const atual = sel.value;
+  const opcoes = [new Option('Todos', '')].concat(equipe.map((b) => new Option(b.nome, b.nome)));
+  sel.replaceChildren(...opcoes);
+  sel.value = equipe.some((b) => b.nome === atual) ? atual : '';
+  $('#filtro-barbeiro-rotulo').hidden = equipe.length < 2;
+}
+
+$('#form-barbeiro').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const campo = ev.target.nome;
+  if (!campo.value.trim()) return;
+  await mudarBarbeiro('', { method: 'POST', body: JSON.stringify({ nome: campo.value.trim() }) });
+  if ($('#erro').hidden) campo.value = '';
+});
+document.querySelectorAll('.aba').forEach((b) => b.addEventListener('click', () => mostrarAba(b.dataset.aba)));
+$('#filtro-barbeiro').addEventListener('change', carregar);
+api('/barbeiros').then(atualizarFiltroBarbeiro).catch(() => {});
+
+$('#data').value = hojeLocal(); carregar(); });
 carregar();
 setInterval(carregar, 60000);

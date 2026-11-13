@@ -106,7 +106,7 @@ function aplicarMarca(info) {
     const digitos = info.whatsapp.replace(/\D/g, '');
     const numero = digitos.length <= 11 ? '55' + digitos : digitos;
     $('#btn-whatsapp').href = `https://wa.me/${numero}?text=` +
-      encodeURIComponent(`Olá! Vim pelo site de agendamento da ${info.nome}.`);
+      encodeURIComponent('Olá! Vim pelo site de agendamento da barbearia.');
     $('#btn-whatsapp').hidden = false;
   }
   if (info.instagram) {

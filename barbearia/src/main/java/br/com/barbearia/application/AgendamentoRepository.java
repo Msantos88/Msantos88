@@ -38,6 +38,9 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, UUID> 
                                     @Param("email") String email,
                                     @Param("agora") LocalDateTime agora);
 
+    long countByBarbeiroIdAndStatusInAndInicioAfter(Long barbeiroId, Collection<StatusAgendamento> status,
+                                                    LocalDateTime depoisDe);
+
     Optional<Agendamento> findByPagamentoId(String pagamentoId);
 
     List<Agendamento> findByStatus(StatusAgendamento status);
