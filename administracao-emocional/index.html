@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<div class="progress" aria-hidden="true"></div>
 
 <header class="topbar" id="topo">
   <a class="brand" href="#topo" aria-label="Administração Emocional — início">
@@ -37,20 +38,24 @@
 
   <!-- HERO -->
   <section class="hero">
+    <div class="blobs" aria-hidden="true"><i></i><i></i><i></i></div>
     <div class="hero-text">
-      <p class="eyebrow">Leonardo de Souza</p>
-      <h1><span class="grad">Administração</span> <span class="blue">Emocional</span></h1>
-      <p class="subtitle">A neurociência das emoções transformando as organizações</p>
-      <p class="lead">Uma abordagem inovadora que conecta o funcionamento biológico das emoções à realidade das organizações.</p>
-      <div class="cta-row">
+      <p class="eyebrow rise" style="--d:0s">Leonardo de Souza</p>
+      <h1 class="rise" style="--d:.12s"><span class="grad">Administração</span> <span class="blue">Emocional</span></h1>
+      <p class="subtitle rise" style="--d:.3s">A neurociência das emoções transformando as organizações</p>
+      <p class="lead rise" style="--d:.42s">Uma abordagem inovadora que conecta o funcionamento biológico das emoções à realidade das organizações.</p>
+      <div class="cta-row rise" style="--d:.54s">
         <a class="btn btn-primary" href="#comprar">Comprar o livro</a>
         <a class="btn btn-ghost" href="#livro">Conhecer o livro</a>
       </div>
     </div>
-    <div class="hero-art">
-      <img src="assets/capa.jpg" alt="Capa do livro Administração Emocional, de Leonardo de Souza" class="book" width="900" height="1274">
+    <div class="hero-art rise-book">
+      <div class="tilt"><img src="assets/capa.jpg" alt="Capa do livro Administração Emocional, de Leonardo de Souza" class="book" width="900" height="1274"><span class="shine" aria-hidden="true"></span></div>
     </div>
   </section>
+
+  <!-- FAIXA ROLANTE -->
+  <div class="marquee" aria-hidden="true"><div class="track"><span>Neurociência das emoções</span><span>Saúde mental nas organizações</span><span>Liderança</span><span>Cultura organizacional</span><span>Administração Emocional</span><span>Neurociência das emoções</span><span>Saúde mental nas organizações</span><span>Liderança</span><span>Cultura organizacional</span><span>Administração Emocional</span><span>Neurociência das emoções</span><span>Saúde mental nas organizações</span><span>Liderança</span><span>Cultura organizacional</span><span>Administração Emocional</span><span>Neurociência das emoções</span><span>Saúde mental nas organizações</span><span>Liderança</span><span>Cultura organizacional</span><span>Administração Emocional</span></div></div>
 
   <!-- SOBRE O LIVRO -->
   <section id="livro" class="section">
@@ -124,6 +129,7 @@
       <div class="col-text reveal">
         <p class="eyebrow">Autor e contato</p>
         <h2>Leonardo de Souza</h2>
+        <div class="stat"><strong><span data-count="20">20</span>+</strong><span>anos de experiência em consultoria</span></div>
         <p>Possui mais de vinte anos de experiência em consultoria para gestão de empresas e dirige, no Brasil, as operações de uma importante consultoria multinacional de Executive Search.</p>
         <p>É formado em Engenharia pela Universidade Federal do Rio de Janeiro (UFRJ) e possui Master in Business Administration pela Fundação Dom Cabral, com extensão na Kellogg School of Management.</p>
         <p>Fascinado pelo funcionamento do cérebro e estudioso do comportamento humano, especializou-se em Neurociências e Comportamento.</p>
@@ -211,11 +217,10 @@
       <div class="col-text reveal">
         <p class="eyebrow light">Onde comprar</p>
         <h2>Leve a Administração Emocional para a sua organização</h2>
-        <p>Publicado pela Alta Books. Já à venda.</p>
+        <p>Publicado pela Alta Books. Já à venda em versão física e digital.</p>
         <ul class="stores">
-          <li><a class="store primary" href="https://altabooks.com.br/produto/administracao-emocional/" target="_blank" rel="noopener"><strong>Alta Books</strong><span>Comprar no site da editora →</span></a></li>
-          <!-- TODO: incluir demais livrarias quando o autor confirmar os links -->
-          <li><span class="store soon"><strong>Outras livrarias</strong><span>Em breve</span></span></li>
+          <li><a class="store primary" href="https://altabooks.com.br/produto/administracao-emocional/" target="_blank" rel="noopener"><strong>Livro físico</strong><span>Comprar na Alta Books →</span></a></li>
+          <li><a class="store primary" href="https://www.amazon.com.br/dp/8550830410" target="_blank" rel="noopener"><strong>Livro digital</strong><span>Comprar na Amazon →</span></a></li>
         </ul>
       </div>
     </div>
@@ -234,6 +239,8 @@
     </div>
   </div>
 </footer>
+
+<a class="sticky-cta" href="#comprar">Comprar o livro</a>
 
 <script src="js/main.js"></script>
 </body>

@@ -9,4 +9,4 @@ Seções: Sobre o livro · O que as pessoas estão dizendo · Autor e contato ·
 - Foto do autor (`assets/leonardo-de-souza.jpg`)
 - E-mail de destino do formulário (`js/main.js`) e link do LinkedIn
 - Links reais de vídeos, artigos e podcasts
-- Demais livrarias além da Alta Books
+- Outras livrarias, se houver (hoje: Alta Books e Amazon)
