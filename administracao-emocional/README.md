@@ -7,6 +7,6 @@ Seções: Sobre o livro · O que as pessoas estão dizendo · Autor e contato ·
 ## Pendências (marcadas com `TODO` no código)
 - Depoimentos reais (hoje são placeholders)
 - Foto do autor (`assets/leonardo-de-souza.jpg`)
-- E-mail de destino do formulário (`js/main.js`) e link do LinkedIn
+- E-mail de destino do formulário (`js/main.js`)
 - Links reais de vídeos, artigos e podcasts
 - Outras livrarias, se houver (hoje: Alta Books e Amazon)
