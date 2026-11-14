@@ -1,0 +1,39 @@
+# ===== Segurança, cache e compressão (Hostinger / LiteSpeed / Apache) =====
+Options -Indexes
+ServerSignature Off
+
+# Bloqueia acesso a arquivos ocultos e de projeto
+<FilesMatch "(^\.(?!well-known)|\.(md|zip|bak|log|sql|ini)$)">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  Header always set Strict-Transport-Security "max-age=31536000"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
+
+  # HTML/CSS/JS: sempre revalidar (evita o site "quebrado" por cache antigo)
+  <FilesMatch "\.(html|css|js)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  # Imagens e fontes: cache longo
+  <FilesMatch "\.(jpg|jpeg|png|webp|woff2)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml
+</IfModule>
+
+# Força HTTPS (ative o SSL no hPanel antes)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
