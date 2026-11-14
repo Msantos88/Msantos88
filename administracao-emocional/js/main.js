@@ -17,7 +17,7 @@
 
   // Barra de progresso + botão fixo
   var bar = document.querySelector('.progress');
-  var sticky = document.querySelector('.sticky-cta');
+  var sticky = document.querySelector('.dock');
   var hero = document.querySelector('.hero');
   var buy = document.getElementById('comprar');
   var ticking = false;
