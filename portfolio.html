@@ -1,0 +1,379 @@
+<title>Estúdio Lume</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: cabeçalho fixo, hero tipográfico, grade filtrável de cases com visuais desenhados em CSS/SVG, processo, contato. */
+:root{
+  --bg:#F1F3EF; --surface:#FFFFFF; --fg:#13171E; --muted:#5B6370; --line:#D9DDD6;
+  --accent:#2540F5; --accent-fg:#FFFFFF; --soft:#E3E8FF;
+  --f-display:'Bricolage Grotesque','Helvetica Neue',Arial,sans-serif;
+  --f-body:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1318; --surface:#171C23; --fg:#EEF0F4; --muted:#9AA3B0; --line:#2A313B;
+  --accent:#6F86FF; --accent-fg:#0B0F2E; --soft:#1D2540; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1318; --surface:#171C23; --fg:#EEF0F4; --muted:#9AA3B0; --line:#2A313B;
+  --accent:#6F86FF; --accent-fg:#0B0F2E; --soft:#1D2540; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));margin:0}
+a{color:inherit}
+.wrap{max-width:1160px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);line-height:1.05;margin:0;text-wrap:balance;letter-spacing:-.02em}
+.eyebrow{font-family:var(--f-mono);font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* header */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line);
+  margin:0 calc(-1*max(16px,env(safe-area-inset-left,0px)));padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px;max-width:1160px;margin:0 auto}
+.logo{font-family:var(--f-display);font-weight:800;font-size:22px;text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo i{width:18px;height:18px;border-radius:50%;background:var(--accent);display:inline-block;box-shadow:6px 0 0 -2px var(--fg)}
+.nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0;font-size:15px}
+.nav ul a{text-decoration:none;color:var(--muted)}
+.nav ul a:hover{color:var(--fg)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--accent-fg);font-weight:700;text-decoration:none;
+  padding:12px 20px;border-radius:999px;border:0;font:inherit;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--fg);border:1.5px solid var(--fg)}
+.btn:hover{filter:brightness(1.08)}
+@media(max-width:760px){.nav ul{display:none}}
+
+/* hero */
+.hero{padding-block:72px 56px}
+.hero h1{font-size:clamp(44px,8.4vw,112px);font-weight:800;max-width:15ch;margin-top:20px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p{font-size:clamp(17px,2vw,21px);color:var(--muted);max-width:56ch;margin:28px 0 32px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:48px}
+.chips span{font-size:14px;border:1px solid var(--line);padding:6px 14px;border-radius:999px;background:var(--surface)}
+
+section{padding-block:64px;border-top:1px solid var(--line)}
+.sec-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:16px;margin-bottom:36px}
+.sec-h h2{font-size:clamp(32px,5vw,56px);font-weight:800;max-width:16ch}
+.sec-h p{color:var(--muted);max-width:44ch;margin:0}
+
+/* services */
+.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.pillar{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px;min-width:0}
+.pillar h3{font-size:26px;font-weight:700;margin:10px 0 14px}
+.pillar ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;color:var(--muted);font-size:15px}
+.pillar li::before{content:"–";margin-right:8px;color:var(--accent)}
+
+/* filter */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.filters button{font:inherit;font-size:14px;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+
+/* cases */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:28px 24px}
+.case{min-width:0}
+.case[hidden]{display:none}
+.vis{aspect-ratio:4/3;border-radius:14px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;max-width:100%}
+.case h3{font-size:22px;font-weight:700;margin:16px 0 6px}
+.case p{margin:0;color:var(--muted);font-size:15px}
+.tag{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.note{color:var(--muted);font-size:14px;margin-top:32px}
+
+/* visual building blocks (cores próprias de cada "cliente") */
+.v1{background:#F4C95D}
+.v2{background:#1F3A34;padding:20px;gap:10px;align-items:stretch}
+.v3{background:#E9E3DA;padding:14px}
+.v4{background:#CBD3F7;padding:22px}
+.v5{background:#fff;padding:12px}
+.v6{background:#FFF3F0;padding:14px;align-items:stretch}
+.v7{background:#14171C;padding:18px;color:#EDEFF3;align-items:stretch}
+.v8{background:#E5484D;padding:18px}
+.v9{background:#0F2A2E;padding:18px;color:#E8F6F3;align-items:stretch}
+
+.sw{display:flex;flex-direction:column;gap:6px;flex:1}
+.sw b{flex:1;border-radius:8px}
+.sw span{font-family:var(--f-mono);font-size:10px;color:#CFE3DC}
+.mood{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);gap:8px;width:100%;height:100%}
+.mood div{border-radius:8px}
+.browser{width:100%;background:#fff;border-radius:10px;box-shadow:0 14px 30px -12px rgba(20,30,90,.45);overflow:hidden;color:#14171C}
+.browser .bar{height:22px;background:#EEF0F6;display:flex;gap:5px;align-items:center;padding:0 10px}
+.browser .bar i{width:7px;height:7px;border-radius:50%;background:#B9BECC}
+.browser .body{padding:16px;display:grid;gap:8px}
+.ln{height:8px;border-radius:4px;background:#D7DBE8}
+.feed{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%;height:100%}
+.feed div{display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-weight:800;font-size:15px;text-align:center;padding:6px;line-height:1.05}
+.cal{width:100%;display:grid;grid-template-columns:repeat(7,1fr);gap:4px;font-size:10px;font-family:var(--f-mono);color:#7A5750}
+.cal b{font-weight:500;text-align:center}
+.cal div{background:#fff;border-radius:5px;min-height:26px;padding:3px;display:flex;flex-direction:column;gap:2px}
+.cal i{display:block;height:5px;border-radius:3px}
+.report{width:100%;display:grid;gap:12px;align-content:start}
+.report .row{display:grid;grid-template-columns:90px 1fr 34px;gap:8px;align-items:center;font-size:11px;font-family:var(--f-mono)}
+.report .track{height:7px;background:#2A2F38;border-radius:4px;overflow:hidden}
+.report .track i{display:block;height:100%;background:#7C93FF}
+.flyer{height:100%;aspect-ratio:3/4;background:#FFE9E3;border-radius:6px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;color:#2A0C0C;box-shadow:0 14px 30px -12px rgba(60,0,0,.5)}
+.flyer strong{font-family:var(--f-display);font-weight:800;font-size:clamp(26px,4vw,34px);line-height:.95;letter-spacing:-.03em}
+.flyer small{font-family:var(--f-mono);font-size:9px;letter-spacing:.06em}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kpis div{background:#173A40;border-radius:8px;padding:8px}
+.kpis small{display:block;font-family:var(--f-mono);font-size:9px;color:#8FC5BD}
+.kpis b{font-family:var(--f-display);font-size:20px}
+
+/* process */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;counter-reset:s}
+.step{border-top:2px solid var(--fg);padding-top:16px;counter-increment:s;min-width:0}
+.step::before{content:"Etapa " counter(s);font-family:var(--f-mono);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.step h3{font-size:22px;margin:8px 0}
+.step p{margin:0;color:var(--muted);font-size:15px}
+
+/* contact */
+.contact{background:var(--accent);color:var(--accent-fg);border-radius:20px;padding:clamp(28px,6vw,64px);display:grid;gap:24px}
+.contact h2{font-size:clamp(34px,6vw,68px);font-weight:800;max-width:14ch}
+.contact p{margin:0;max-width:52ch;opacity:.9}
+.contact .btn{background:var(--accent-fg);color:var(--accent)}
+.contact .btn.ghost{background:transparent;color:var(--accent-fg);border-color:var(--accent-fg)}
+.contact code{font-family:var(--f-mono);background:rgba(255,255,255,.16);padding:4px 10px;border-radius:6px;overflow-wrap:anywhere}
+footer{padding-block:32px 48px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+
+<header>
+  <div class="nav">
+    <a class="logo" href="#topo"><i></i>Estúdio Lume</a>
+    <ul>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#portfolio">Portfólio</a></li>
+      <li><a href="#processo">Processo</a></li>
+    </ul>
+    <a class="btn" href="#contato">Pedir orçamento</a>
+  </div>
+</header>
+
+<main class="wrap" id="topo">
+  <div class="hero">
+    <div class="eyebrow">Marca · Conteúdo · Tráfego · Sites</div>
+    <h1>Sua marca <em>aparece</em>, o cliente chega.</h1>
+    <p>Criamos logo, identidade visual, site, conteúdo e anúncios que seguem a mesma linha. Assim cada peça reforça a anterior e o investimento rende mais.</p>
+    <div class="cta">
+      <a class="btn" href="#contato">Quero um diagnóstico gratuito</a>
+      <a class="btn ghost" href="#portfolio">Ver projetos</a>
+    </div>
+    <div class="chips">
+      <span>Sites</span><span>Gestão de redes sociais</span><span>Tráfego pago</span><span>Análise de perfil do Instagram</span>
+      <span>Calendário de conteúdo</span><span>Flyers e artes</span><span>Moodboard</span><span>Identidade visual</span><span>Logotipo</span>
+    </div>
+  </div>
+
+  <section id="servicos">
+    <div class="sec-h">
+      <h2>Quatro frentes, uma só estratégia.</h2>
+      <p>Você pode contratar uma frente isolada ou o pacote completo. Em todos os casos o trabalho parte do mesmo briefing.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar"><span class="tag">Marca</span><h3>Quem você é</h3>
+        <ul><li>Logotipo e variações</li><li>Identidade visual</li><li>Moodboard e direção de arte</li></ul></div>
+      <div class="pillar"><span class="tag">Conteúdo</span><h3>O que você diz</h3>
+        <ul><li>Gestão de redes sociais</li><li>Calendário de conteúdo</li><li>Flyers e artes para posts</li><li>Análise de perfil do Instagram</li></ul></div>
+      <div class="pillar"><span class="tag">Performance</span><h3>Quem chega até você</h3>
+        <ul><li>Tráfego pago (Meta e Google)</li><li>Criativos e testes</li><li>Relatório mensal de resultados</li></ul></div>
+      <div class="pillar"><span class="tag">Web</span><h3>Onde tudo converge</h3>
+        <ul><li>Sites e landing pages</li><li>Responsivo e rápido</li><li>Botão de WhatsApp e SEO básico</li></ul></div>
+    </div>
+  </section>
+
+  <section id="portfolio">
+    <div class="sec-h">
+      <h2>Projetos selecionados</h2>
+      <p>Cada projeto mostra um serviço. Filtre pela frente que você procura.</p>
+    </div>
+    <div class="filters" role="group" aria-label="Filtrar projetos">
+      <button type="button" data-f="all" aria-pressed="true">Todos</button>
+      <button type="button" data-f="marca" aria-pressed="false">Marca</button>
+      <button type="button" data-f="conteudo" aria-pressed="false">Conteúdo</button>
+      <button type="button" data-f="performance" aria-pressed="false">Performance</button>
+      <button type="button" data-f="web" aria-pressed="false">Web</button>
+    </div>
+
+    <div class="grid" id="grid">
+      <article class="case" data-c="marca">
+        <div class="vis v1">
+          <svg viewBox="0 0 200 120" width="78%" role="img" aria-label="Logotipo Café Brisa">
+            <circle cx="52" cy="60" r="34" fill="#3B2314"/>
+            <path d="M34 62c10-16 26-16 36 0-10 14-26 14-36 0z" fill="#F4C95D"/>
+            <path d="M52 40v40" stroke="#3B2314" stroke-width="4"/>
+            <text x="98" y="58" font-family="Bricolage Grotesque,Arial" font-weight="800" font-size="30" fill="#3B2314">Café</text>
+            <text x="98" y="86" font-family="Bricolage Grotesque,Arial" font-weight="800" font-size="30" fill="#3B2314">Brisa</text>
+          </svg>
+        </div>
+        <h3>Café Brisa</h3><p>Logotipo com versões horizontal, vertical e ícone para fachada e embalagem.</p>
+        <span class="tag">Logotipo · conceito</span>
+      </article>
+
+      <article class="case" data-c="marca">
+        <div class="vis v2">
+          <div class="sw"><b style="background:#F4E9D2"></b><span>#F4E9D2</span></div>
+          <div class="sw"><b style="background:#E8A33D"></b><span>#E8A33D</span></div>
+          <div class="sw"><b style="background:#2E8B6F"></b><span>#2E8B6F</span></div>
+          <div class="sw"><b style="background:#0F1F1B;border:1px solid #3a5a50"></b><span>#0F1F1B</span></div>
+          <div style="position:absolute;right:20px;top:14px;font-family:Bricolage Grotesque,Arial;font-weight:800;font-size:44px;color:#F4E9D2;line-height:1">Aa</div>
+        </div>
+        <h3>Verde Vivo Nutrição</h3><p>Paleta, tipografia, grafismos e regras de uso reunidos em um manual enxuto.</p>
+        <span class="tag">Identidade visual · conceito</span>
+      </article>
+
+      <article class="case" data-c="marca">
+        <div class="vis v3">
+          <div class="mood">
+            <div style="background:#C96F4A;grid-column:span 2;grid-row:span 2"></div>
+            <div style="background:#2F4B3F"></div>
+            <div style="background:#F2D6A2;border-radius:50%"></div>
+            <div style="background:#1B1B1B"></div>
+            <div style="background:#9DB4A0;grid-row:span 2"></div>
+            <div style="background:#F7F1E6;grid-column:span 2;display:flex;align-items:center;justify-content:center;font-family:Bricolage Grotesque,Arial;font-weight:800;font-size:16px;color:#2F4B3F">natural · artesanal</div>
+            <div style="background:#D9B38C"></div>
+          </div>
+        </div>
+        <h3>Ateliê Raiz</h3><p>Referências, texturas e cores que alinham a equipe antes de qualquer logo ser desenhado.</p>
+        <span class="tag">Moodboard · conceito</span>
+      </article>
+
+      <article class="case" data-c="web">
+        <div class="vis v4">
+          <div class="browser">
+            <div class="bar"><i></i><i></i><i></i></div>
+            <div class="body">
+              <div style="font-family:Bricolage Grotesque,Arial;font-weight:800;font-size:20px;line-height:1">Clínica Sorriso Real</div>
+              <div class="ln" style="width:80%"></div><div class="ln" style="width:55%"></div>
+              <div style="display:flex;gap:8px;margin-top:4px"><span style="background:#2540F5;border-radius:99px;height:18px;width:84px"></span><span style="border:1.5px solid #2540F5;border-radius:99px;height:18px;width:60px"></span></div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px"><div style="background:#E3E8FF;height:34px;border-radius:6px"></div><div style="background:#E3E8FF;height:34px;border-radius:6px"></div><div style="background:#E3E8FF;height:34px;border-radius:6px"></div></div>
+            </div>
+          </div>
+        </div>
+        <h3>Clínica Sorriso Real</h3><p>Site de uma página com agendamento por WhatsApp, adaptado para celular.</p>
+        <span class="tag">Site · conceito</span>
+      </article>
+
+      <article class="case" data-c="conteudo">
+        <div class="vis v5">
+          <div class="feed">
+            <div style="background:#FF6B57;color:#fff">Sabor de<br>domingo</div>
+            <div style="background:#FFE9D6;color:#7A2E1D">Receita<br>da semana</div>
+            <div style="background:#1E1E1E;color:#FFD166">3 dicas</div>
+            <div style="background:#FFD166;color:#1E1E1E">Cardápio<br>novo</div>
+            <div style="background:#FF6B57;color:#fff">Bastidores</div>
+            <div style="background:#FFE9D6;color:#7A2E1D">Depoi-<br>mento</div>
+            <div style="background:#1E1E1E;color:#FFD166">Promo<br>do mês</div>
+            <div style="background:#FF6B57;color:#fff">Chef<br>responde</div>
+            <div style="background:#FFD166;color:#1E1E1E">Sextou</div>
+          </div>
+        </div>
+        <h3>Gestão de redes: Bistrô Aurora</h3><p>Feed com linguagem visual própria, alternando venda, bastidores e conteúdo útil.</p>
+        <span class="tag">Redes sociais · conceito</span>
+      </article>
+
+      <article class="case" data-c="conteudo">
+        <div class="vis v6">
+          <div style="width:100%;display:grid;gap:8px;align-content:start">
+            <div style="display:flex;justify-content:space-between;font-family:Bricolage Grotesque,Arial;font-weight:800;color:#7A2E1D"><span>Novembro</span><span style="font-family:JetBrains Mono,monospace;font-size:10px;font-weight:500">12 posts · 8 stories</span></div>
+            <div class="cal">
+              <b>S</b><b>T</b><b>Q</b><b>Q</b><b>S</b><b>S</b><b>D</b>
+              <div>1<i style="background:#FF6B57"></i></div><div>2</div><div>3<i style="background:#2540F5"></i></div><div>4</div><div>5<i style="background:#FF6B57"></i><i style="background:#F4C95D"></i></div><div>6</div><div>7</div>
+              <div>8</div><div>9<i style="background:#2540F5"></i></div><div>10</div><div>11<i style="background:#FF6B57"></i></div><div>12</div><div>13<i style="background:#F4C95D"></i></div><div>14</div>
+              <div>15<i style="background:#FF6B57"></i></div><div>16</div><div>17<i style="background:#2540F5"></i></div><div>18</div><div>19<i style="background:#FF6B57"></i></div><div>20</div><div>21</div>
+            </div>
+          </div>
+        </div>
+        <h3>Calendário de conteúdo</h3><p>Mês planejado por pilar, formato e data, com cores para cada tipo de post.</p>
+        <span class="tag">Planejamento · conceito</span>
+      </article>
+
+      <article class="case" data-c="conteudo">
+        <div class="vis v7">
+          <div class="report">
+            <div style="display:flex;justify-content:space-between;align-items:end"><div><div style="font-family:JetBrains Mono,monospace;font-size:10px;color:#9AA3B0;letter-spacing:.1em">DIAGNÓSTICO @perfil</div><div style="font-family:Bricolage Grotesque,Arial;font-weight:800;font-size:20px">Nota geral</div></div><div style="font-family:Bricolage Grotesque,Arial;font-weight:800;font-size:38px;color:#7C93FF;line-height:1">6,4</div></div>
+            <div class="row"><span>Bio</span><div class="track"><i style="width:80%"></i></div><span>8</span></div>
+            <div class="row"><span>Feed</span><div class="track"><i style="width:55%"></i></div><span>5</span></div>
+            <div class="row"><span>Engajamento</span><div class="track"><i style="width:40%"></i></div><span>4</span></div>
+            <div class="row"><span>Frequência</span><div class="track"><i style="width:70%"></i></div><span>7</span></div>
+          </div>
+        </div>
+        <h3>Análise de perfil do Instagram</h3><p>Relatório com bio, feed, engajamento e concorrentes, fechado com um plano de ação.</p>
+        <span class="tag">Diagnóstico · conceito</span>
+      </article>
+
+      <article class="case" data-c="conteudo">
+        <div class="vis v8">
+          <div class="flyer">
+            <small>SÁBADO · 15/11 · 14H</small>
+            <strong>Feira<br>do Bairro</strong>
+            <small>ENTRADA GRATUITA · RUA DAS FLORES, 120</small>
+          </div>
+        </div>
+        <h3>Flyer: Feira do Bairro</h3><p>Arte para impressão e para stories, com a mesma hierarquia nos dois formatos.</p>
+        <span class="tag">Flyer · conceito</span>
+      </article>
+
+      <article class="case" data-c="performance">
+        <div class="vis v9">
+          <div style="width:100%;display:grid;gap:10px;align-content:start">
+            <div style="font-family:JetBrains Mono,monospace;font-size:10px;letter-spacing:.1em;color:#8FC5BD">CAMPANHA DE LEADS · 30 DIAS · EXEMPLO</div>
+            <div class="kpis">
+              <div><small>CPL</small><b>R$ 4,80</b></div>
+              <div><small>LEADS</small><b>312</b></div>
+              <div><small>ROAS</small><b>3,2x</b></div>
+            </div>
+            <svg viewBox="0 0 220 60" width="100%" aria-hidden="true"><path d="M0 52 L30 46 L60 48 L90 34 L120 36 L150 22 L185 18 L220 6 L220 60 L0 60Z" fill="#1B4A50"/><path d="M0 52 L30 46 L60 48 L90 34 L120 36 L150 22 L185 18 L220 6" fill="none" stroke="#5EEAD4" stroke-width="2.5"/><circle cx="220" cy="6" r="3.5" fill="#5EEAD4"/></svg>
+          </div>
+        </div>
+        <h3>Tráfego pago: Studio Corpo em Foco</h3><p>Campanha de captação com criativos testados e relatório mensal simples de ler.</p>
+        <span class="tag">Meta Ads · números ilustrativos</span>
+      </article>
+    </div>
+    <p class="note">Todos os projetos desta página são conceituais e usam marcas fictícias, criados para demonstrar o método de trabalho. Os números são ilustrativos.</p>
+  </section>
+
+  <section id="processo">
+    <div class="sec-h">
+      <h2>Como o trabalho acontece</h2>
+      <p>Um fluxo curto, com entregas visíveis em cada etapa e aprovação antes de seguir.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><h3>Briefing</h3><p>Conversa sobre o negócio, o público e o que você quer vender.</p></div>
+      <div class="step"><h3>Estratégia</h3><p>Diagnóstico, referências, moodboard e plano de ação.</p></div>
+      <div class="step"><h3>Criação</h3><p>Marca, artes, site ou campanhas, com rodadas de ajuste.</p></div>
+      <div class="step"><h3>Publicação</h3><p>Entrega dos arquivos, site no ar e anúncios ativos.</p></div>
+      <div class="step"><h3>Acompanhamento</h3><p>Relatório mensal e melhorias com base nos números.</p></div>
+    </div>
+  </section>
+
+  <section id="contato" style="border-top:0">
+    <div class="contact">
+      <div class="eyebrow" style="color:inherit;opacity:.8">Contato</div>
+      <h2>Vamos colocar sua marca em movimento?</h2>
+      <p>Conte rapidamente o que você precisa. Respondemos em até um dia útil com os próximos passos e, se fizer sentido, um diagnóstico gratuito do seu Instagram.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+        <a class="btn" href="https://wa.me/5500000000000" target="_blank" rel="noopener">Chamar no WhatsApp</a>
+        <button class="btn ghost" type="button" id="copy">Copiar e-mail</button>
+        <code id="mail">contato@seudominio.com.br</code>
+      </div>
+      <small id="copied" aria-live="polite" style="min-height:1.2em"></small>
+    </div>
+  </section>
+
+  <footer><span>© 2026 Estúdio Lume</span><span>Marca · Conteúdo · Performance · Web</span></footer>
+</main>
+
+<script>
+(function(){
+  var btns=document.querySelectorAll('.filters button'),cases=document.querySelectorAll('.case');
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});
+    var f=b.getAttribute('data-f');
+    cases.forEach(function(c){c.hidden=!(f==='all'||c.getAttribute('data-c')===f)});
+  })});
+  var copy=document.getElementById('copy'),mail=document.getElementById('mail'),msg=document.getElementById('copied');
+  copy.addEventListener('click',function(){
+    var done=function(){msg.textContent='E-mail copiado.'};
+    var fallback=function(){var r=document.createRange();r.selectNodeContents(mail);var s=getSelection();s.removeAllRanges();s.addRange(r);msg.textContent='Selecione e copie o e-mail acima.'};
+    try{navigator.clipboard.writeText(mail.textContent).then(done,fallback)}catch(e){fallback()}
+  });
+})();
+</script>
