@@ -331,3 +331,8 @@ mark{color:inherit;background:linear-gradient(#ffd65c,#ffd65c) no-repeat 0 88%/0
 .player::backdrop{background:rgba(15,19,36,.82);backdrop-filter:blur(4px)}
 .player video{display:block;width:100%;max-height:86vh;border-radius:16px;background:#000}
 .player-close{position:absolute;right:-10px;top:-14px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:#fff;color:var(--ink);font-size:1.5rem;line-height:1;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.4)}
+
+/* Cartões de post com imagem */
+.pthumb{display:block;border-radius:12px;overflow:hidden;margin-bottom:6px;background:#eee;aspect-ratio:4/5}
+.pthumb img{width:100%;height:100%;object-fit:cover;border-radius:0;transition:transform .5s}
+.pcard:hover .pthumb img{transform:scale(1.04)}

@@ -31,3 +31,7 @@ Seções: Sobre o livro · O que as pessoas estão dizendo · Autor e contato ·
 - Os 3 vídeos originais (.mov, cerca de 1 GB) ficam no Drive. Para o site, converta com `ferramentas/preparar-videos.sh` (gera `video-N.mp4` e `video-N.jpg`).
 - Envie os arquivos para `assets/videos/` na hospedagem. Cada cartão de vídeo aparece sozinho quando o arquivo existe, sem editar código.
 - Para trocar o título "Vídeo N", edite o `<h3>` do cartão em `index.html`.
+
+## Posts do Instagram
+- Cada cartão de post abre o link em `href`. Troque pelo link do post (Instagram: ⋯ > Copiar link, no formato `https://www.instagram.com/p/CÓDIGO/`, sem `?igsh=`).
+- A capa do post fica em `assets/posts/` e entra no cartão com `<span class="pthumb"><img ...></span>` (veja o do estoicismo).
