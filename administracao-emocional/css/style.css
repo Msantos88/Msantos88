@@ -295,3 +295,9 @@ mark{color:inherit;background:linear-gradient(#ffd65c,#ffd65c) no-repeat 0 88%/0
 }
 @media (prefers-reduced-motion:reduce){.badge i,.glow{animation:none}mark{transition:none}}
 .stat strong span{font-size:inherit;color:inherit;max-width:none;line-height:1}
+
+/* Depoimentos: estado vazio */
+.soon-quote{max-width:640px;margin:36px auto 0;text-align:center;background:#fff;border-radius:var(--radius);padding:44px 32px;box-shadow:var(--shadow);border:2px dashed rgba(44,91,180,.2)}
+.soon-quote .qmark{font-family:var(--display);font-size:5.5rem;line-height:1;display:block;height:60px;color:var(--purple);overflow:visible}
+.soon-quote h3{font-size:1.3rem;margin:.3rem 0 .6rem}
+.soon-quote p{color:var(--muted);margin:0 0 1.4rem;font-family:var(--serif);font-size:1.1rem}

@@ -15,3 +15,10 @@ Seções: Sobre o livro · O que as pessoas estão dizendo · Autor e contato ·
 - `.htaccess` aplica HTTPS, cabeçalhos de segurança (CSP, HSTS etc.), cache e compressão.
 - CSS/JS usam `?v=4`; ao alterar, aumente o número para forçar atualização.
 - Fontes são locais (`assets/fonts`); o site não faz requisições a terceiros.
+
+## Pendências para publicar (atualizado)
+- Email de destino do formulário (`DESTINO` em `js/main.js`): ainda é de exemplo, NÃO publicar assim
+- Links de vídeos, artigos e podcasts (hoje apontam para o perfil do Instagram)
+- Depoimentos reais (seção mostra aviso "estão chegando" até lá)
+- Confirmar se há outros links de compra além de Alta Books e Amazon
+- Definir onde publicar: domínio principal ou subdomínio (cliente já tem WordPress na Hostinger)
