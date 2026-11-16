@@ -136,6 +136,31 @@
       .then(function () { submit.disabled = false; });
   });
 
+  // Vídeos: o cartão aparece sozinho quando o arquivo existe no servidor
+  var player = document.getElementById('player');
+  var pv = player.querySelector('video');
+  document.querySelectorAll('.vcard').forEach(function (card) {
+    fetch(card.dataset.video, { method: 'HEAD' }).then(function (r) {
+      if (!r.ok) return;
+      var img = new Image();
+      img.alt = '';
+      img.loading = 'lazy';
+      img.src = card.dataset.poster;
+      card.querySelector('.thumb').prepend(img);
+      card.hidden = false;
+    }).catch(function () {});
+    card.addEventListener('click', function () {
+      pv.poster = card.dataset.poster || '';
+      pv.src = card.dataset.video;
+      if (typeof player.showModal === 'function') player.showModal(); else player.setAttribute('open', '');
+      pv.play().catch(function () {});
+    });
+  });
+  function fecharPlayer() { pv.pause(); pv.removeAttribute('src'); pv.load(); if (player.open) player.close(); }
+  player.querySelector('.player-close').addEventListener('click', fecharPlayer);
+  player.addEventListener('click', function (e) { if (e.target === player) fecharPlayer(); });
+  player.addEventListener('close', function () { pv.pause(); });
+
   // Mostra apenas as lojas que já têm link preenchido
   var lojas = document.querySelectorAll('li[data-pendente]');
   var algum = false;

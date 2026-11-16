@@ -317,3 +317,17 @@ mark{color:inherit;background:linear-gradient(#ffd65c,#ffd65c) no-repeat 0 88%/0
 .hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
 .col-text .form-note{margin:0;font-family:var(--sans);font-size:.8rem;color:var(--muted)}
 .form button[disabled]{opacity:.65;cursor:wait;transform:none}
+
+/* Cartões de vídeo e player */
+.vcard{border:0;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.vcard[hidden]{display:none}
+.vcard .thumb{position:relative;display:block;aspect-ratio:4/5;border-radius:12px;overflow:hidden;margin-bottom:6px;background:linear-gradient(135deg,#e8474f,#8a3a9c 55%,#2c5bb4)}
+.vcard .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:0}
+.vcard .play{position:absolute;left:50%;top:50%;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;background:rgba(255,255,255,.92);box-shadow:0 10px 26px -8px rgba(0,0,0,.5);transition:transform .25s}
+.vcard .play::after{content:"";position:absolute;left:25px;top:19px;border-left:19px solid var(--magenta);border-top:12px solid transparent;border-bottom:12px solid transparent}
+.vcard:hover .play{transform:scale(1.12)}
+.vcard:hover{transform:translateY(-5px)}
+.player{border:0;padding:0;background:#000;border-radius:16px;max-width:min(92vw,520px);width:100%;overflow:visible}
+.player::backdrop{background:rgba(15,19,36,.82);backdrop-filter:blur(4px)}
+.player video{display:block;width:100%;max-height:86vh;border-radius:16px;background:#000}
+.player-close{position:absolute;right:-10px;top:-14px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:#fff;color:var(--ink);font-size:1.5rem;line-height:1;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.4)}

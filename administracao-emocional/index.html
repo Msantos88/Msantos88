@@ -10,8 +10,8 @@
   <meta property="og:image" content="assets/capa.jpg">
   <link rel="icon" href="assets/favicon.png">
   <link rel="preload" href="assets/fonts/BebasNeue-400.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/fonts.css?v=9">
-  <link rel="stylesheet" href="css/style.css?v=9">
+  <link rel="stylesheet" href="css/fonts.css?v=11">
+  <link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
 <div class="progress" aria-hidden="true"></div>
@@ -153,51 +153,58 @@
       <div class="tabs" role="group" aria-label="Filtrar conteúdo">
         <button aria-pressed="true" data-f="all">Tudo</button>
         <button aria-pressed="false" data-f="video">Vídeos</button>
-        <button aria-pressed="false" data-f="artigo">Artigos</button>
+        <button aria-pressed="false" data-f="post">Posts</button>
         <button aria-pressed="false" data-f="podcast">Podcasts</button>
       </div>
 
-      <!-- TODO: trocar títulos e links pelos conteúdos reais (hoje apontam para o Instagram) -->
+      <!-- Vídeos: aparecem sozinhos quando assets/videos/video-N.mp4 existir no servidor -->
       <div class="cards">
-        <a class="card reveal" data-t="video" href="https://www.instagram.com/administracao.emocional/" target="_blank" rel="noopener">
+        <button type="button" class="card vcard reveal" data-t="video" data-video="assets/videos/video-1.mp4" data-poster="assets/videos/video-1.jpg" hidden>
+          <span class="thumb"><span class="play" aria-hidden="true"></span></span>
           <span class="tag tag-video">Vídeo</span>
-          <h3>O som que você escuta e que ninguém pronunciou</h3>
-          <p>Reels sobre o que as emoções comunicam no ambiente de trabalho.</p>
+          <h3>Vídeo 1</h3>
           <span class="more">Assistir →</span>
-        </a>
-        <a class="card reveal" data-t="video" href="https://www.instagram.com/administracao.emocional/" target="_blank" rel="noopener">
+        </button>
+        <button type="button" class="card vcard reveal" data-t="video" data-video="assets/videos/video-2.mp4" data-poster="assets/videos/video-2.jpg" hidden>
+          <span class="thumb"><span class="play" aria-hidden="true"></span></span>
           <span class="tag tag-video">Vídeo</span>
-          <h3>O ambiente mudou rápido demais</h3>
-          <p>Reflexões sobre ritmo, pressão e saúde mental nas organizações.</p>
+          <h3>Vídeo 2</h3>
           <span class="more">Assistir →</span>
+        </button>
+        <button type="button" class="card vcard reveal" data-t="video" data-video="assets/videos/video-3.mp4" data-poster="assets/videos/video-3.jpg" hidden>
+          <span class="thumb"><span class="play" aria-hidden="true"></span></span>
+          <span class="tag tag-video">Vídeo</span>
+          <h3>Vídeo 3</h3>
+          <span class="more">Assistir →</span>
+        </button>
+        <a class="card reveal" data-t="post" href="https://www.instagram.com/administracao.emocional/" target="_blank" rel="noopener">
+          <span class="tag tag-artigo">Post</span>
+          <h3>O orçamento aumenta, as iniciativas se intensificam, mas os afastamentos e o turnover só crescem</h3>
+          <span class="more">Ver no Instagram →</span>
         </a>
-        <a class="card reveal" data-t="artigo" href="https://www.instagram.com/administracao.emocional/" target="_blank" rel="noopener">
-          <span class="tag tag-artigo">Artigo</span>
+        <a class="card reveal" data-t="post" href="https://www.instagram.com/administracao.emocional/" target="_blank" rel="noopener">
+          <span class="tag tag-artigo">Post</span>
           <h3>Por que o estoicismo é ainda tão influente depois de séculos?</h3>
-          <p>Filosofia e emoções: o que os antigos já sabiam sobre administrar o que sentimos.</p>
-          <span class="more">Ler →</span>
+          <span class="more">Ver no Instagram →</span>
         </a>
-        <a class="card reveal" data-t="artigo" href="https://www.instagram.com/administracao.emocional/" target="_blank" rel="noopener">
-          <span class="tag tag-artigo">Artigo</span>
-          <h3>O orçamento aumenta, mas afastamentos e turnover só crescem</h3>
-          <p>Por que atacar consequências não resolve o problema de saúde mental.</p>
-          <span class="more">Ler →</span>
+        <a class="card reveal" data-t="post" href="https://www.instagram.com/administracao.emocional/" target="_blank" rel="noopener">
+          <span class="tag tag-artigo">Post</span>
+          <h3>Platão comparou as emoções a cavalos</h3>
+          <span class="more">Ver no Instagram →</span>
         </a>
         <div class="card reveal placeholder" data-t="podcast">
           <span class="tag tag-podcast">Podcast</span>
-          <h3>Participação em podcast</h3>
-          <p>Em breve: entrevistas e episódios com o autor.</p>
-          <span class="more muted">Em breve</span>
-        </div>
-        <div class="card reveal placeholder" data-t="podcast">
-          <span class="tag tag-podcast">Podcast</span>
-          <h3>Participação em podcast</h3>
-          <p>Em breve: entrevistas e episódios com o autor.</p>
+          <h3>Participações em podcast</h3>
           <span class="more muted">Em breve</span>
         </div>
       </div>
     </div>
   </section>
+
+  <dialog id="player" class="player" aria-label="Reprodutor de vídeo">
+    <button type="button" class="player-close" aria-label="Fechar vídeo">×</button>
+    <video controls playsinline preload="none"></video>
+  </dialog>
 
   <!-- ONDE COMPRAR -->
   <section id="comprar" class="section buy">
@@ -242,6 +249,6 @@
 
 <div class="dock" role="complementary" aria-label="Comprar o livro"><div class="dock-txt"><strong>Administração Emocional</strong><span>Já à venda · físico e digital</span></div><a href="#comprar">Comprar o livro</a></div>
 
-<script src="js/main.js?v=9" defer></script>
+<script src="js/main.js?v=11" defer></script>
 </body>
 </html>
