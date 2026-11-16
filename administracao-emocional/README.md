@@ -17,8 +17,7 @@ Seções: Sobre o livro · O que as pessoas estão dizendo · Autor e contato ·
 - Fontes são locais (`assets/fonts`); o site não faz requisições a terceiros.
 
 ## Pendências para publicar (atualizado)
-- Email de destino do formulário (`DESTINO` em `js/main.js`): ainda é de exemplo, NÃO publicar assim
+- Email de destino do formulário: hoje está com o email de TESTE do desenvolvedor (`DESTINO` em `js/main.js`). Trocar pelo email do cliente antes de publicar
 - Links de vídeos, artigos e podcasts (hoje apontam para o perfil do Instagram)
 - Depoimentos reais (seção mostra aviso "estão chegando" até lá)
-- Links diretos do livro nas lojas: Livraria da Travessa, Leitura, Livraria da Vila, Martins Fontes e Mercado Livre (preencher o href em index.html, bloco "Também disponível em")
 - Definir onde publicar: domínio principal ou subdomínio (cliente já tem WordPress na Hostinger)

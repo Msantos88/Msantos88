@@ -102,7 +102,7 @@
   // Formulário de contato: abre o app de e-mail do visitante.
   var form = document.getElementById('contato');
   var msg = form.querySelector('.form-msg');
-  var DESTINO = 'contato@exemplo.com.br'; // TODO: e-mail do autor
+  var DESTINO = 'mreis.santos88@gmail.com'; // TESTE. TODO: trocar pelo email do cliente antes de publicar
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var d = new FormData(form);
@@ -119,7 +119,7 @@
       '?subject=' + encodeURIComponent('Contato pelo site Administração Emocional') +
       '&body=' + encodeURIComponent(body);
     msg.className = 'form-msg ok';
-    msg.textContent = 'Abrindo seu aplicativo de e-mail…';
+    msg.textContent = 'Abrindo seu aplicativo de email…';
   });
 
   // Mostra apenas as lojas que já têm link preenchido
