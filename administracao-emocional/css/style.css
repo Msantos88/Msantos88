@@ -310,3 +310,5 @@ mark{color:inherit;background:linear-gradient(#ffd65c,#ffd65c) no-repeat 0 88%/0
 .stores.small .store span{font-size:.8rem}
 .stores.small .store:hover{background:rgba(255,255,255,.26)}
 @media (max-width:480px){.stores.small{grid-template-columns:1fr}}
+
+.anchor-top{position:absolute;top:0;left:0;width:1px;height:1px;scroll-margin-top:0}

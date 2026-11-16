@@ -131,5 +131,14 @@
   });
   document.querySelectorAll('[data-more]').forEach(function (el) { el.hidden = !algum; });
 
+  // Links para o topo: rolam até y=0 de forma confiável
+  document.querySelectorAll('a[href="#topo"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      toggle(false);
+    });
+  });
+
   document.getElementById('ano').textContent = new Date().getFullYear();
 })();
