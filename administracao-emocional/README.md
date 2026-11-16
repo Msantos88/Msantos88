@@ -20,5 +20,5 @@ Seções: Sobre o livro · O que as pessoas estão dizendo · Autor e contato ·
 - Email de destino do formulário (`DESTINO` em `js/main.js`): ainda é de exemplo, NÃO publicar assim
 - Links de vídeos, artigos e podcasts (hoje apontam para o perfil do Instagram)
 - Depoimentos reais (seção mostra aviso "estão chegando" até lá)
-- Confirmar se há outros links de compra além de Alta Books e Amazon
+- Links diretos do livro nas lojas: Livraria da Travessa, Leitura, Livraria da Vila, Martins Fontes e Mercado Livre (preencher o href em index.html, bloco "Também disponível em")
 - Definir onde publicar: domínio principal ou subdomínio (cliente já tem WordPress na Hostinger)

@@ -122,5 +122,14 @@
     msg.textContent = 'Abrindo seu aplicativo de e-mail…';
   });
 
+  // Mostra apenas as lojas que já têm link preenchido
+  var lojas = document.querySelectorAll('li[data-pendente]');
+  var algum = false;
+  lojas.forEach(function (li) {
+    var a = li.querySelector('a');
+    if (a.getAttribute('href')) { li.hidden = false; algum = true; }
+  });
+  document.querySelectorAll('[data-more]').forEach(function (el) { el.hidden = !algum; });
+
   document.getElementById('ano').textContent = new Date().getFullYear();
 })();

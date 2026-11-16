@@ -301,3 +301,12 @@ mark{color:inherit;background:linear-gradient(#ffd65c,#ffd65c) no-repeat 0 88%/0
 .soon-quote .qmark{font-family:var(--display);font-size:5.5rem;line-height:1;display:block;height:60px;color:var(--purple);overflow:visible}
 .soon-quote h3{font-size:1.3rem;margin:.3rem 0 .6rem}
 .soon-quote p{color:var(--muted);margin:0 0 1.4rem;font-family:var(--serif);font-size:1.1rem}
+
+/* Outras lojas */
+.more-stores{margin:1.6rem 0 .6rem!important;font-family:var(--sans)!important;font-size:.9rem!important;letter-spacing:.1em;text-transform:uppercase;color:#ffe3e5!important}
+.stores.small{grid-template-columns:1fr 1fr;max-width:440px;margin-top:0;gap:10px}
+.stores.small .store{padding:12px 16px;border-radius:12px}
+.stores.small .store strong{font-size:.95rem}
+.stores.small .store span{font-size:.8rem}
+.stores.small .store:hover{background:rgba(255,255,255,.26)}
+@media (max-width:480px){.stores.small{grid-template-columns:1fr}}
