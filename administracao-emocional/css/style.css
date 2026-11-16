@@ -312,3 +312,8 @@ mark{color:inherit;background:linear-gradient(#ffd65c,#ffd65c) no-repeat 0 88%/0
 @media (max-width:480px){.stores.small{grid-template-columns:1fr}}
 
 .anchor-top{position:absolute;top:0;left:0;width:1px;height:1px;scroll-margin-top:0}
+
+/* Formulário: campo armadilha e nota */
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
+.col-text .form-note{margin:0;font-family:var(--sans);font-size:.8rem;color:var(--muted)}
+.form button[disabled]{opacity:.65;cursor:wait;transform:none}

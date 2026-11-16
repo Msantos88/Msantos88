@@ -99,27 +99,41 @@
     });
   });
 
-  // Formulário de contato: abre o app de e-mail do visitante.
+  // Formulário de contato: envio direto pelo site (enviar.php), sem abrir app de email.
   var form = document.getElementById('contato');
   var msg = form.querySelector('.form-msg');
-  var DESTINO = 'mreis.santos88@gmail.com'; // TESTE. TODO: trocar pelo email do cliente antes de publicar
+  var submit = form.querySelector('button[type=submit]');
+  var EMAIL_FALLBACK = ''; // opcional: email exibido se o envio falhar
+  form.elements.t.value = Math.floor(Date.now() / 1000);
+
+  function aviso(tipo, texto) { msg.className = 'form-msg ' + tipo; msg.textContent = texto; }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var d = new FormData(form);
-    var nome = (d.get('nome') || '').trim();
-    var email = (d.get('email') || '').trim();
-    var texto = (d.get('mensagem') || '').trim();
+    var nome = form.elements.nome.value.trim();
+    var email = form.elements.email.value.trim();
+    var texto = form.elements.mensagem.value.trim();
     if (!nome || !/^\S+@\S+\.\S+$/.test(email) || !texto) {
-      msg.className = 'form-msg err';
-      msg.textContent = 'Preencha nome, um e-mail válido e a mensagem.';
+      aviso('err', 'Preencha nome, um email válido e a mensagem.');
       return;
     }
-    var body = texto + '\n\n— ' + nome + ' (' + email + ')';
-    window.location.href = 'mailto:' + DESTINO +
-      '?subject=' + encodeURIComponent('Contato pelo site Administração Emocional') +
-      '&body=' + encodeURIComponent(body);
-    msg.className = 'form-msg ok';
-    msg.textContent = 'Abrindo seu aplicativo de email…';
+    submit.disabled = true;
+    aviso('', 'Enviando…');
+    fetch(form.getAttribute('action'), { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } })
+      .then(function (r) { return r.json().catch(function () { return { ok: false, mensagem: '' }; }); })
+      .then(function (d) {
+        if (d.ok) {
+          aviso('ok', d.mensagem || 'Mensagem enviada!');
+          form.reset();
+          form.elements.t.value = Math.floor(Date.now() / 1000);
+        } else {
+          aviso('err', d.mensagem || 'Não foi possível enviar agora. Tente novamente em instantes.');
+        }
+      })
+      .catch(function () {
+        aviso('err', 'Não foi possível enviar agora. Verifique sua conexão e tente novamente' + (EMAIL_FALLBACK ? ', ou escreva para ' + EMAIL_FALLBACK + '.' : '.'));
+      })
+      .then(function () { submit.disabled = false; });
   });
 
   // Mostra apenas as lojas que já têm link preenchido

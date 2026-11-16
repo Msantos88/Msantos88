@@ -10,8 +10,8 @@
   <meta property="og:image" content="assets/capa.jpg">
   <link rel="icon" href="assets/favicon.png">
   <link rel="preload" href="assets/fonts/BebasNeue-400.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/fonts.css?v=8">
-  <link rel="stylesheet" href="css/style.css?v=8">
+  <link rel="stylesheet" href="css/fonts.css?v=9">
+  <link rel="stylesheet" href="css/style.css?v=9">
 </head>
 <body>
 <div class="progress" aria-hidden="true"></div>
@@ -129,12 +129,15 @@
             <li><a href="https://www.linkedin.com/in/leonardod2/" target="_blank" rel="noopener">LinkedIn <span>Leonardo de Souza</span></a></li>
             <li><a href="https://www.linkedin.com/company/livro-administra%C3%A7%C3%A3o-emocional/" target="_blank" rel="noopener">LinkedIn <span>Página do livro</span></a></li>
           </ul>
-          <form id="contato" class="form" novalidate>
-            <label>Nome <input name="nome" type="text" autocomplete="name" required></label>
-            <label>E-mail <input name="email" type="email" autocomplete="email" required></label>
-            <label>Mensagem <textarea name="mensagem" rows="4" required></textarea></label>
+          <form id="contato" class="form" action="enviar.php" method="post" novalidate>
+            <label>Nome <input name="nome" type="text" autocomplete="name" maxlength="100" required></label>
+            <label>Email <input name="email" type="email" autocomplete="email" maxlength="150" required></label>
+            <label>Mensagem <textarea name="mensagem" rows="4" maxlength="3000" required></textarea></label>
+            <div class="hp" aria-hidden="true"><label>Não preencha <input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+            <input type="hidden" name="t" value="">
             <button class="btn btn-primary" type="submit">Enviar mensagem</button>
             <p class="form-msg" role="status" aria-live="polite"></p>
+            <p class="form-note">Seus dados serão usados apenas para responder à sua mensagem.</p>
           </form>
         </div>
       </div>
@@ -239,6 +242,6 @@
 
 <div class="dock" role="complementary" aria-label="Comprar o livro"><div class="dock-txt"><strong>Administração Emocional</strong><span>Já à venda · físico e digital</span></div><a href="#comprar">Comprar o livro</a></div>
 
-<script src="js/main.js?v=8" defer></script>
+<script src="js/main.js?v=9" defer></script>
 </body>
 </html>
