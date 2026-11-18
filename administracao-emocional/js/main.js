@@ -140,8 +140,9 @@
   var player = document.getElementById('player');
   var pv = player.querySelector('video');
   document.querySelectorAll('.vcard').forEach(function (card) {
-    fetch(card.dataset.video, { method: 'HEAD' }).then(function (r) {
-      if (!r.ok) return;
+    var url = card.dataset.video;
+    function revelar() {
+      if (!card.hidden) return;
       var thumb = card.querySelector('.thumb');
       var img = new Image();
       img.alt = '';
@@ -152,16 +153,25 @@
         var v = document.createElement('video');
         v.muted = true; v.playsInline = true; v.preload = 'metadata'; v.tabIndex = -1;
         v.setAttribute('aria-hidden', 'true');
-        v.src = card.dataset.video + '#t=1';
+        v.src = url + '#t=1';
         thumb.prepend(v);
       };
       img.src = card.dataset.poster;
       thumb.prepend(img);
       card.hidden = false;
-    }).catch(function () {});
+    }
+    // O cartão só aparece se o navegador conseguir abrir o vídeo (arquivo existe e formato é compatível)
+    var teste = document.createElement('video');
+    teste.preload = 'metadata';
+    teste.muted = true;
+    teste.addEventListener('loadedmetadata', revelar);
+    teste.addEventListener('error', function () {
+      if (window.console) console.warn('[video] não foi possível abrir ' + url + ' (código ' + (teste.error ? teste.error.code : '?') + ')');
+    });
+    teste.src = url;
     card.addEventListener('click', function () {
       pv.poster = card.dataset.poster || '';
-      pv.src = card.dataset.video;
+      pv.src = url;
       if (typeof player.showModal === 'function') player.showModal(); else player.setAttribute('open', '');
       pv.play().catch(function () {});
     });
