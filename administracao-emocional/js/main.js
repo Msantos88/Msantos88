@@ -172,6 +172,8 @@
     card.addEventListener('click', function () {
       pv.poster = card.dataset.poster || '';
       pv.src = url;
+      var tt = document.getElementById('player-title');
+      if (tt) tt.textContent = card.querySelector('h3').textContent;
       if (typeof player.showModal === 'function') player.showModal(); else player.setAttribute('open', '');
       pv.play().catch(function () {});
     });
