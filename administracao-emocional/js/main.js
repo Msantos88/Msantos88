@@ -143,21 +143,12 @@
     var url = card.dataset.video;
     function revelar() {
       if (!card.hidden) return;
-      var thumb = card.querySelector('.thumb');
-      var img = new Image();
-      img.alt = '';
-      img.loading = 'lazy';
-      img.onerror = function () {
-        // Sem imagem de capa: usa um quadro do próprio vídeo
-        img.remove();
-        var v = document.createElement('video');
-        v.muted = true; v.playsInline = true; v.preload = 'metadata'; v.tabIndex = -1;
-        v.setAttribute('aria-hidden', 'true');
-        v.src = url + '#t=1';
-        thumb.prepend(v);
-      };
-      img.src = card.dataset.poster;
-      thumb.prepend(img);
+      // Capa = quadro do próprio vídeo (sem depender de imagem separada)
+      var v = document.createElement('video');
+      v.muted = true; v.playsInline = true; v.preload = 'metadata'; v.tabIndex = -1;
+      v.setAttribute('aria-hidden', 'true');
+      v.src = url + '#t=1';
+      card.querySelector('.thumb').prepend(v);
       card.hidden = false;
     }
     // O cartão só aparece se o navegador conseguir abrir o vídeo (arquivo existe e formato é compatível)
@@ -170,7 +161,6 @@
     });
     teste.src = url;
     card.addEventListener('click', function () {
-      pv.poster = card.dataset.poster || '';
       pv.src = url;
       var tt = document.getElementById('player-title');
       if (tt) tt.textContent = card.querySelector('h3').textContent;
