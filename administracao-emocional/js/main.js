@@ -142,11 +142,21 @@
   document.querySelectorAll('.vcard').forEach(function (card) {
     fetch(card.dataset.video, { method: 'HEAD' }).then(function (r) {
       if (!r.ok) return;
+      var thumb = card.querySelector('.thumb');
       var img = new Image();
       img.alt = '';
       img.loading = 'lazy';
+      img.onerror = function () {
+        // Sem imagem de capa: usa um quadro do próprio vídeo
+        img.remove();
+        var v = document.createElement('video');
+        v.muted = true; v.playsInline = true; v.preload = 'metadata'; v.tabIndex = -1;
+        v.setAttribute('aria-hidden', 'true');
+        v.src = card.dataset.video + '#t=1';
+        thumb.prepend(v);
+      };
       img.src = card.dataset.poster;
-      card.querySelector('.thumb').prepend(img);
+      thumb.prepend(img);
       card.hidden = false;
     }).catch(function () {});
     card.addEventListener('click', function () {
