@@ -7,6 +7,11 @@ ServerSignature Off
   Require all denied
 </FilesMatch>
 
+# Dados de acesso do email: nunca servir pela web
+<FilesMatch "^config-email.*\.php$">
+  Require all denied
+</FilesMatch>
+
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-Frame-Options "SAMEORIGIN"
