@@ -406,3 +406,20 @@ h1{font-size:clamp(2.3rem,11vw,7.2rem)}
   .cta-row .btn{flex:1 1 auto;text-align:center;justify-content:center}
   .lead{font-size:1.1rem;max-width:none}
 }
+
+/* Telas muito estreitas (ex.: Galaxy Fold fechado, 280px) */
+.stores,.stores li{min-width:0;width:100%}
+.store{min-width:0;overflow-wrap:anywhere}
+.stores.small{grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))}
+@media (max-width:340px){
+  .wrap,.hero{padding-left:16px;padding-right:16px}
+  .section{padding:52px 0}
+  .btn{padding:12px 18px;font-size:.95rem}
+  .btn-arrow{padding:7px 7px 7px 18px;gap:10px}
+  .pillar,.card,.quote{padding-left:18px;padding-right:18px}
+}
+
+.contact ul{max-width:100%}
+.contact li{max-width:100%;min-width:0}
+.contact li a{max-width:100%;flex-wrap:wrap;row-gap:0;overflow-wrap:anywhere}
+.contact li a span{min-width:0;overflow-wrap:anywhere}
