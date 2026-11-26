@@ -35,3 +35,8 @@ Seções: Sobre o livro · O que as pessoas estão dizendo · Autor e contato ·
 ## Posts do Instagram
 - Cada cartão de post abre o link em `href`. Troque pelo link do post (Instagram: ⋯ > Copiar link, no formato `https://www.instagram.com/p/CÓDIGO/`, sem `?igsh=`).
 - A capa do post fica em `assets/posts/` e entra no cartão com `<span class="pthumb"><img ...></span>` (veja o do estoicismo).
+
+## Conteúdo editável
+- Todo conteúdo que muda (depoimentos, vídeos, podcasts, posts e lojas) fica em `conteudo.js`. O site monta as seções a partir dele.
+- Veja o "Manual de Atualização do Site" para o passo a passo.
+- O podcast usa YouTube sem cookies (`youtube-nocookie.com`), carregado só ao clicar. A regra `frame-src` do `.htaccess` permite esse domínio.

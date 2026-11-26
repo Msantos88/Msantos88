@@ -10,8 +10,8 @@
   <meta property="og:image" content="assets/capa.jpg">
   <link rel="icon" href="assets/favicon.png">
   <link rel="preload" href="assets/fonts/BebasNeue-400.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/fonts.css?v=18">
-  <link rel="stylesheet" href="css/style.css?v=18">
+  <link rel="stylesheet" href="css/fonts.css?v=20">
+  <link rel="stylesheet" href="css/style.css?v=20">
 </head>
 <body>
 <div class="progress" aria-hidden="true"></div>
@@ -99,11 +99,13 @@
     <div class="wrap">
       <p class="eyebrow center">O que as pessoas estão dizendo</p>
       <h2 class="center">Leitores e <mark>especialistas</mark></h2>
+      <div id="lista-depoimentos">
       <div class="soon-quote reveal">
         <span class="qmark" aria-hidden="true">“</span>
         <h3>Os primeiros depoimentos estão chegando</h3>
         <p>Leu o livro? Conte o que achou e ajude outros leitores a conhecerem a Administração Emocional.</p>
         <a class="btn btn-primary" href="#contato">Enviar meu depoimento</a>
+      </div>
       </div>
     </div>
   </section>
@@ -157,51 +159,8 @@
         <button aria-pressed="false" data-f="podcast">Podcasts</button>
       </div>
 
-      <!-- Posts: troque o href de cada cartão pelo link do post (Instagram, ... > Copiar link) e inclua a imagem em assets/posts/ -->
-      <!-- Vídeos: aparecem sozinhos quando assets/videos/video-N.mp4 existir no servidor -->
-      <div class="cards">
-        <button type="button" class="card vcard reveal" data-t="video" data-video="assets/videos/video-1.mp4" hidden>
-          <span class="thumb"><span class="play" aria-hidden="true"></span></span>
-          <span class="tag tag-video">Vídeo</span>
-          <h3>O que são emoções e sentimentos</h3>
-          <span class="more">Assistir →</span>
-        </button>
-        <button type="button" class="card vcard reveal" data-t="video" data-video="assets/videos/video-2.mp4" hidden>
-          <span class="thumb"><span class="play" aria-hidden="true"></span></span>
-          <span class="tag tag-video">Vídeo</span>
-          <h3>Como esse livro pode mudar a saúde</h3>
-          <span class="more">Assistir →</span>
-        </button>
-        <button type="button" class="card vcard reveal" data-t="video" data-video="assets/videos/video-3.mp4" hidden>
-          <span class="thumb"><span class="play" aria-hidden="true"></span></span>
-          <span class="tag tag-video">Vídeo</span>
-          <h3>3 ações de liderança que podem mudar o ambiente</h3>
-          <span class="more">Assistir →</span>
-        </button>
-        <a class="card pcard reveal" data-t="post" href="https://www.instagram.com/p/DfhLMyHH04o/" target="_blank" rel="noopener">
-          <span class="pthumb"><img src="assets/posts/orcamento.jpg" alt="Capa do post: O orçamento aumenta, as iniciativas se intensificam, mas os afastamentos e o turnover só crescem" loading="lazy" width="900" height="1148"></span>
-          <span class="tag tag-artigo">Post</span>
-          <h3>O orçamento aumenta, as iniciativas se intensificam, mas os afastamentos e o turnover só crescem</h3>
-          <span class="more">Ver no Instagram →</span>
-        </a>
-        <a class="card pcard reveal" data-t="post" href="https://www.instagram.com/p/DfS6OZCAJkZ/" target="_blank" rel="noopener">
-          <span class="pthumb"><img src="assets/posts/estoicismo.jpg" alt="Capa do post: Por que o estoicismo é ainda tão influente depois de 2.300 anos" loading="lazy" width="884" height="1092"></span>
-          <span class="tag tag-artigo">Post</span>
-          <h3>Por que o estoicismo é ainda tão influente depois de séculos?</h3>
-          <span class="more">Ver no Instagram →</span>
-        </a>
-        <a class="card pcard reveal" data-t="post" href="https://www.instagram.com/p/DfVX0RhH1Lr/" target="_blank" rel="noopener">
-          <span class="pthumb"><img src="assets/posts/platao.jpg" alt="Capa do post: Platão comparou as emoções a dois cavalos selvagens" loading="lazy" width="900" height="1148"></span>
-          <span class="tag tag-artigo">Post</span>
-          <h3>Platão comparou as emoções a cavalos</h3>
-          <span class="more">Ver no Instagram →</span>
-        </a>
-        <div class="card reveal placeholder" data-t="podcast">
-          <span class="tag tag-podcast">Podcast</span>
-          <h3>Participações em podcast</h3>
-          <span class="more muted">Em breve</span>
-        </div>
-      </div>
+      <!-- Os cartões abaixo são montados a partir do arquivo conteudo.js -->
+      <div class="cards" id="lista-midia"></div>
     </div>
   </section>
 
@@ -209,6 +168,12 @@
     <button type="button" class="player-close" aria-label="Fechar vídeo">×</button>
     <video controls playsinline preload="none"></video>
     <p class="player-title" id="player-title"></p>
+  </dialog>
+
+  <dialog id="player-yt" class="player yt" aria-label="Reprodutor de podcast">
+    <button type="button" class="player-close" aria-label="Fechar podcast">×</button>
+    <div class="yt-frame"></div>
+    <p class="player-title" id="player-yt-title"></p>
   </dialog>
 
   <!-- ONDE COMPRAR -->
@@ -221,19 +186,13 @@
         <p class="eyebrow light">Onde comprar</p>
         <h2>Leve a Administração Emocional para a sua organização</h2>
         <p>Publicado pela Alta Books. Já à venda em versão física e digital.</p>
-        <ul class="stores">
+        <ul class="stores" id="lojas-principais">
           <li><a class="store primary" href="https://altabooks.com.br/produto/administracao-emocional/" target="_blank" rel="noopener"><strong>Livro físico</strong><span>Comprar na Alta Books →</span></a></li>
           <li><a class="store primary" href="https://www.amazon.com.br/dp/8550830410" target="_blank" rel="noopener"><strong>Livro digital</strong><span>Comprar na Amazon →</span></a></li>
         </ul>
         
-        <p class="more-stores" data-more hidden>Também disponível em:</p>
-        <ul class="stores small" data-more hidden>
-          <li hidden data-pendente><a class="store" href="https://www.travessa.com.br/administracao-emocional-a-neurociencia-das-emocoes-transformando-as-organizacoes/artigo/4777101d-02e2-4151-b4bc-19608dfacd3c" target="_blank" rel="noopener"><strong>Livraria da Travessa</strong><span>Comprar online →</span></a></li>
-          <li hidden data-pendente><a class="store" href="https://leitura.com.br/produto/administracao-emocional-leonardo-de-souza-9788550830414" target="_blank" rel="noopener"><strong>Livraria Leitura</strong><span>Comprar online →</span></a></li>
-          <li hidden data-pendente><a class="store" href="https://www.livrariadavila.com.br/970922-administracao-emocional-a-neurociencia/p" target="_blank" rel="noopener"><strong>Livraria da Vila</strong><span>Comprar online →</span></a></li>
-          <li hidden data-pendente><a class="store" href="https://www.martinsfontespaulista.com.br/administracao-emocional-1218841/p" target="_blank" rel="noopener"><strong>Martins Fontes</strong><span>Comprar online →</span></a></li>
-          <li hidden data-pendente><a class="store" href="https://www.mercadolivre.com.br/administracao-emocional-souza-leonardo-de-editora-alta-books-capa-mole/p/MLB79083527" target="_blank" rel="noopener"><strong>Mercado Livre</strong><span>Comprar online →</span></a></li>
-        </ul>
+        <p class="more-stores" id="lojas-outras-titulo" hidden>Também disponível em:</p>
+        <ul class="stores small" id="lojas-outras" hidden></ul>
       </div>
     </div>
   </section>
@@ -254,6 +213,7 @@
 
 <div class="dock" role="complementary" aria-label="Comprar o livro"><div class="dock-txt"><strong>Administração Emocional</strong><span>Já à venda · físico e digital</span></div><a href="#comprar">Comprar o livro</a></div>
 
-<script src="js/main.js?v=18" defer></script>
+<script src="conteudo.js?v=20" defer></script>
+<script src="js/main.js?v=20" defer></script>
 </body>
 </html>
