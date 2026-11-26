@@ -78,6 +78,7 @@
       b.appendChild(th);
       b.appendChild(el('span', 'tag tag-video', 'Vídeo'));
       b.appendChild(el('h3', '', v.titulo || 'Vídeo'));
+      if (v.detalhe) b.appendChild(el('span', 'det', v.detalhe));
       b.appendChild(el('span', 'more', 'Assistir →'));
       midia.appendChild(b);
     });
@@ -95,6 +96,7 @@
       b.appendChild(th);
       b.appendChild(el('span', 'tag tag-podcast', 'Podcast'));
       b.appendChild(el('h3', '', p.titulo || 'Podcast'));
+      if (p.detalhe) b.appendChild(el('span', 'det', p.detalhe));
       b.appendChild(el('span', 'more', 'Ouvir →'));
       midia.appendChild(b);
     });
