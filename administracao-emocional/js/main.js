@@ -40,18 +40,85 @@
   var depBox = document.getElementById('lista-depoimentos');
   if (dep.length && depBox) {
     depBox.textContent = '';
-    var grid = el('div', 'quotes');
-    grid.setAttribute('data-n', String(Math.min(dep.length, 3)));
-    dep.forEach(function (d) {
-      var f = el('figure', 'quote reveal');
+    function figuraDepoimento(d, classe) {
+      var f = el('figure', classe);
       f.appendChild(el('blockquote', '', String(d.texto).replace(/^[“"\s]+|[”"\s]+$/g, '')));
       var cap = el('figcaption');
       cap.appendChild(el('strong', '', d.nome || ''));
       if (d.cargo) cap.appendChild(el('span', '', d.cargo));
       f.appendChild(cap);
-      grid.appendChild(f);
-    });
-    depBox.appendChild(grid);
+      return f;
+    }
+    if (dep.length === 1) {
+      var grid = el('div', 'quotes');
+      grid.setAttribute('data-n', '1');
+      grid.appendChild(figuraDepoimento(dep[0], 'quote reveal'));
+      depBox.appendChild(grid);
+    } else {
+      // Carrossel: arrastar (celular), setas, bolinhas e passagem automática lenta
+      var car = el('div', 'depo-car reveal');
+      car.setAttribute('role', 'region');
+      car.setAttribute('aria-roledescription', 'carrossel');
+      car.setAttribute('aria-label', 'Depoimentos');
+      var track = el('div', 'car-track');
+      track.tabIndex = 0;
+      var slides = dep.map(function (d) { var s = figuraDepoimento(d, 'quote car-slide'); track.appendChild(s); return s; });
+      var ctrl = el('div', 'car-ctrl');
+      var prev = el('button', 'car-btn', '‹');
+      prev.type = 'button';
+      prev.setAttribute('aria-label', 'Depoimento anterior');
+      var next = el('button', 'car-btn', '›');
+      next.type = 'button';
+      next.setAttribute('aria-label', 'Próximo depoimento');
+      var dots = el('div', 'car-dots');
+      var bolas = slides.map(function (s, i) {
+        var d = el('button', 'car-dot');
+        d.type = 'button';
+        d.setAttribute('aria-label', 'Ir para o depoimento ' + (i + 1));
+        d.addEventListener('click', function () { parar(); ir(i); });
+        dots.appendChild(d);
+        return d;
+      });
+      ctrl.appendChild(prev); ctrl.appendChild(dots); ctrl.appendChild(next);
+      car.appendChild(track); car.appendChild(ctrl);
+      depBox.appendChild(car);
+
+      var atual = 0, timer = null, parado = false, pausado = false, visivel = false;
+      function ir(i) {
+        i = (i + slides.length) % slides.length;
+        track.scrollTo({ left: slides[i].offsetLeft - track.offsetLeft, behavior: reduce ? 'auto' : 'smooth' });
+      }
+      function marcar() {
+        var melhor = 0, dist = Infinity;
+        slides.forEach(function (s, i) {
+          var d = Math.abs((s.offsetLeft - track.offsetLeft) - track.scrollLeft);
+          if (d < dist) { dist = d; melhor = i; }
+        });
+        atual = melhor;
+        bolas.forEach(function (b, i) { b.classList.toggle('on', i === melhor); if (i === melhor) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+      }
+      var tick = false;
+      track.addEventListener('scroll', function () {
+        if (!tick) { tick = true; requestAnimationFrame(function () { marcar(); tick = false; }); }
+      }, { passive: true });
+      function parar() { parado = true; if (timer) { clearInterval(timer); timer = null; } }
+      prev.addEventListener('click', function () { parar(); ir(atual - 1); });
+      next.addEventListener('click', function () { parar(); ir(atual + 1); });
+      track.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); parar(); ir(atual + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); parar(); ir(atual - 1); }
+      });
+      ['mouseenter', 'focusin', 'touchstart'].forEach(function (ev) { car.addEventListener(ev, function () { pausado = true; }, { passive: true }); });
+      ['mouseleave', 'focusout', 'touchend'].forEach(function (ev) { car.addEventListener(ev, function () { pausado = false; }, { passive: true }); });
+      track.addEventListener('pointerdown', function () { parar(); });
+      if (!reduce) {
+        timer = setInterval(function () { if (!parado && !pausado && visivel && !document.hidden) ir(atual + 1); }, 8000);
+      }
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) { visivel = es[0].isIntersecting; }, { threshold: 0.4 }).observe(car);
+      } else { visivel = true; }
+      marcar();
+    }
     var cta = el('div', 'depo-cta reveal');
     cta.appendChild(el('p', '', 'Leu o livro? Conte o que achou.'));
     var ca = el('a', 'btn btn-primary', 'Enviar meu depoimento');
@@ -90,6 +157,16 @@
       b.setAttribute('data-t', 'podcast');
       b.setAttribute('data-yt', idYoutube(p.youtube));
       var th = el('span', 'thumb');
+      if (p.imagem) {
+        var capa = new Image();
+        capa.src = 'assets/podcasts/' + nomeArquivo(p.imagem);
+        capa.alt = '';
+        capa.loading = 'lazy';
+        capa.onerror = function () { capa.remove(); };
+        th.appendChild(capa);
+        th.classList.add('capa');
+        capa.onerror = function () { capa.remove(); th.classList.remove('capa'); };
+      }
       var pl = el('span', 'play');
       pl.setAttribute('aria-hidden', 'true');
       th.appendChild(pl);
@@ -253,16 +330,35 @@
     items.forEach(function (el) { el.classList.add('in'); });
   }
 
-  // Filtro de conteúdo (Vídeos, Artigos & Podcasts)
+  // Filtro de conteúdo (Vídeos, Posts & Podcasts) e botão "Ver mais"
+  var LIMITE = 6;           // quantos cartões aparecem antes do "Ver mais"
+  var filtroAtual = 'all';
+  var expandido = {};
   var tabs = document.querySelectorAll('.tabs button');
-  var cards = document.querySelectorAll('.card');
+  var verMais = document.getElementById('ver-mais');
+  function aplicarFiltroMidia() {
+    var elegiveis = [];
+    document.querySelectorAll('#lista-midia .card').forEach(function (c) {
+      var ok = !c.hidden && (filtroAtual === 'all' || c.dataset.t === filtroAtual);
+      if (ok) elegiveis.push(c); else c.classList.add('hide');
+    });
+    // só esconde cartões se sobrarem 3 ou mais (evita esconder 1 ou 2 itens)
+    var recolher = !expandido[filtroAtual] && elegiveis.length > LIMITE + 2;
+    elegiveis.forEach(function (c, i) { c.classList.toggle('hide', recolher && i >= LIMITE); });
+    if (verMais) {
+      verMais.hidden = !recolher;
+      verMais.textContent = 'Ver mais (' + (elegiveis.length - LIMITE) + ')';
+    }
+  }
   tabs.forEach(function (tab) {
     tab.addEventListener('click', function () {
-      var f = tab.dataset.f;
+      filtroAtual = tab.dataset.f;
       tabs.forEach(function (t) { t.setAttribute('aria-pressed', String(t === tab)); });
-      cards.forEach(function (c) { c.classList.toggle('hide', f !== 'all' && c.dataset.t !== f); });
+      aplicarFiltroMidia();
     });
   });
+  if (verMais) verMais.addEventListener('click', function () { expandido[filtroAtual] = true; aplicarFiltroMidia(); });
+  aplicarFiltroMidia();
 
   // Formulário de contato: envio direto pelo site (enviar.php), sem abrir app de email.
   var form = document.getElementById('contato');
@@ -315,6 +411,7 @@
       v.src = url + '#t=1';
       card.querySelector('.thumb').prepend(v);
       card.hidden = false;
+      aplicarFiltroMidia();
     }
     // O cartão só aparece se o navegador conseguir abrir o vídeo (arquivo existe e formato é compatível)
     var teste = document.createElement('video');

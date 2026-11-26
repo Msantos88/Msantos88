@@ -365,3 +365,29 @@ mark{color:inherit;background:linear-gradient(#ffd65c,#ffd65c) no-repeat 0 88%/0
 .yt-frame iframe{display:block;width:100%;height:100%;border:0}
 
 .card .det{color:var(--muted);font-size:.85rem;margin-top:-4px}
+
+/* Carrossel de depoimentos */
+.depo-car{max-width:820px;margin:36px auto 0}
+.car-track{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;position:relative;padding:8px 6px 34px;margin:0 -6px;scroll-behavior:smooth;outline-offset:-2px}
+.car-track::-webkit-scrollbar{display:none}
+.car-slide{flex:0 0 100%;scroll-snap-align:center;display:flex;flex-direction:column;justify-content:space-between;text-align:center;padding:44px 40px;min-width:0}
+.car-slide::before{margin:0 auto}
+.car-slide blockquote{font-size:1.2rem;line-height:1.6}
+.car-ctrl{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:-8px}
+.car-btn{width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(44,91,180,.3);background:#fff;color:var(--blue);font-size:1.7rem;line-height:1;cursor:pointer;padding:0 0 3px;transition:.2s}
+.car-btn:hover{background:var(--blue);color:#fff}
+.car-dots{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;max-width:60%}
+.car-dot{width:10px;height:10px;border-radius:50%;border:0;background:rgba(44,91,180,.25);padding:0;cursor:pointer;transition:.25s}
+.car-dot.on{background:var(--magenta);width:26px;border-radius:99px}
+@media (max-width:880px){.car-slide{padding:32px 22px}.car-slide blockquote{font-size:1.05rem}}
+@media (prefers-reduced-motion:reduce){.car-track{scroll-behavior:auto}}
+
+/* Ver mais */
+.ver-mais-box{text-align:center;margin-top:30px}
+.ver-mais-box .btn[hidden]{display:none}
+
+.pcast .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:0}
+
+/* Podcast com capa: play no canto, para não cobrir a imagem */
+.pcast .thumb.capa .play{left:auto;top:auto;right:12px;bottom:12px;margin:0;width:48px;height:48px;background:rgba(255,255,255,.95)}
+.pcast .thumb.capa .play::after{left:19px;top:13px;border-left:15px solid var(--purple);border-top:11px solid transparent;border-bottom:11px solid transparent}

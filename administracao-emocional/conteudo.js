@@ -34,8 +34,9 @@ window.CONTEUDO = {
   // ===== PODCASTS =====
   // "youtube" é o link do episódio no YouTube (pode colar o link inteiro)
   // "detalhe" é opcional: uma linha pequena abaixo do título (nome do programa, por exemplo)
+  // "imagem" é opcional: a capa do episódio, enviada para assets/podcasts/
   podcasts: [
-    { titulo: "Liderança e saúde mental no corporativo com Leonardo de Souza", detalhe: "Luize Talks, episódio 37", youtube: "https://youtu.be/FCj0TthwZGQ" },
+    { titulo: "Liderança e saúde mental no corporativo com Leonardo de Souza", detalhe: "Luize Talks, episódio 37", imagem: "luize-talks-ep37.jpg", youtube: "https://youtu.be/FCj0TthwZGQ" },
   ],
 
   // ===== POSTS DO INSTAGRAM =====
