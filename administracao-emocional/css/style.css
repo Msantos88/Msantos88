@@ -391,3 +391,18 @@ mark{color:inherit;background:linear-gradient(#ffd65c,#ffd65c) no-repeat 0 88%/0
 /* Podcast com capa: play no canto, para não cobrir a imagem */
 .pcast .thumb.capa .play{left:auto;top:auto;right:12px;bottom:12px;margin:0;width:48px;height:48px;background:rgba(255,255,255,.95)}
 .pcast .thumb.capa .play::after{left:19px;top:13px;border-left:15px solid var(--purple);border-top:11px solid transparent;border-bottom:11px solid transparent}
+
+/* ===== Robustez em celulares: o layout aguenta mesmo se as fontes demorarem ou falharem ===== */
+:root{--display:"Bebas Neue","Roboto Condensed","Arial Narrow","Oswald",sans-serif-condensed,Impact,sans-serif}
+.hero>*,.two-col>*,.cards>*,.pillars>*{min-width:0}
+h1,h2,h3,.subtitle,.lead,.eyebrow,.badge,.store,.card h3{overflow-wrap:anywhere}
+h1{font-size:clamp(2.3rem,11vw,7.2rem)}
+.cta-row{flex-wrap:wrap}
+.cta-row .btn{max-width:100%}
+@media (max-width:480px){
+  .subtitle{letter-spacing:.06em;font-size:.82rem}
+  .eyebrow{letter-spacing:.1em}
+  .btn-arrow{padding-left:22px}
+  .cta-row .btn{flex:1 1 auto;text-align:center;justify-content:center}
+  .lead{font-size:1.1rem;max-width:none}
+}
